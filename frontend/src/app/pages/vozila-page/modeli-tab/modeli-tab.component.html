@@ -1,0 +1,26 @@
+<div class="main-container">
+    <div class="header-div">
+        <h1>Marke vozila</h1>
+        <!-- <button class="dodaj" mat-raised-button color="primary">Dodaj Marku</button> -->
+        <!-- <button class="dodaj" mat-raised-button color="primary">Dodaj Model</button> -->
+    </div>
+    <mat-accordion>
+        <mat-expansion-panel *ngFor="let marka of markeVozila; index as i;" 
+                            (opened)="panelOpenState = true"
+                            (closed)="panelOpenState = false">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              {{marka.naziv}}
+            </mat-panel-title>
+            <mat-panel-description>
+              Broj modela: {{marka.modeli.length}}
+            </mat-panel-description>
+          </mat-expansion-panel-header>
+          <ul>
+            <li *ngFor="let model of marka.modeli; index as i;" >
+                {{model.naziv}}
+            </li>
+          </ul>
+        </mat-expansion-panel>
+      </mat-accordion>      
+</div>
