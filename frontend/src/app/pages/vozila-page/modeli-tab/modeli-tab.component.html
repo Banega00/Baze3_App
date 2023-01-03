@@ -4,8 +4,9 @@
         <!-- <button class="dodaj" mat-raised-button color="primary">Dodaj Marku</button> -->
         <!-- <button class="dodaj" mat-raised-button color="primary">Dodaj Model</button> -->
     </div>
-    <mat-accordion>
-        <mat-expansion-panel *ngFor="let marka of markeVozila; index as i;" 
+    <mat-spinner *ngIf="loading" mode="indeterminate"></mat-spinner>
+    <mat-accordion *ngIf="!loading">
+        <mat-expansion-panel  *ngFor="let marka of markeVozila" 
                             (opened)="panelOpenState = true"
                             (closed)="panelOpenState = false">
           <mat-expansion-panel-header>

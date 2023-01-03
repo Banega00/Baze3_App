@@ -1,5 +1,8 @@
 {
   "compilerOptions": {
+    "paths": {
+      "@shared-items/*": ["../shared-items/*"]
+    },
     /* Visit https://aka.ms/tsconfig to read more about this file */
 
     /* Projects */

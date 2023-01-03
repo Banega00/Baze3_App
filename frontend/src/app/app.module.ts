@@ -10,6 +10,7 @@ import { VozilaPageComponent } from './pages/vozila-page/vozila-page.component';
 import { ModeliTabComponent } from './pages/vozila-page/modeli-tab/modeli-tab.component';
 import { VozilaTabComponent } from './pages/vozila-page/vozila-tab/vozila-tab.component';
 import { ServisneKnjigeTabComponent } from './pages/vozila-page/servisne-knjige-tab/servisne-knjige-tab.component';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -25,7 +26,8 @@ import { ServisneKnjigeTabComponent } from './pages/vozila-page/servisne-knjige-
     BrowserAnimationsModule,
     LayoutModule,
     AngularMaterialModuleModule,
-    AppRoutingModule
+    AppRoutingModule,
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]
