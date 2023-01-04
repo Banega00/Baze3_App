@@ -1,0 +1,36 @@
+.card{
+    border: 0px solid white;
+    margin-right: 1rem;
+    margin-top: 2rem;
+    border-radius: 1rem;
+    padding: 2rem 2rem 0;
+    border: 0px solid white;
+}
+
+.ime-div{
+    display: flex;
+    align-items: center;
+    font-size: 1.2em;
+}
+
+.controls{
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    padding: 1rem 0;
+}
+
+.controls > * {
+    cursor: pointer;
+    transition: all .1s;
+}
+
+.controls > *:hover{
+    transform: scale(1.2);
+    color: blue;
+}
+
+.edit-container{
+    display: flex;
+    flex-direction: column;
+}

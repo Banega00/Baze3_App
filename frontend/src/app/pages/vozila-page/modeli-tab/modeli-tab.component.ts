@@ -11,7 +11,6 @@ export class ModeliTabComponent implements OnInit {
 
   panelOpenState = false;
 
-  @Input()
   markeVozila: MarkaVozilaModel[] = []
   
   loading = true;

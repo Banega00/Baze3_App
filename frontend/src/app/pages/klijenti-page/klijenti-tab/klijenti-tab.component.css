@@ -1,0 +1,39 @@
+.main-container{
+    padding: 5rem
+}
+
+.klijenti-container{
+    display: flex;
+    flex-direction: row;
+}
+
+.controls{
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    padding: 1rem 0;
+}
+
+.controls > * {
+    cursor: pointer;
+    transition: all .1s;
+}
+
+.controls > *:hover{
+    transform: scale(1.2);
+    color: blue;
+}
+
+.edit-container{
+    display: flex;
+    flex-direction: column;
+}
+
+.card{
+    border: 0px solid white;
+    margin-left: 1rem;
+    margin-top: 2rem;
+    border-radius: 1rem;
+    padding: 2rem 2rem 0;
+    border: 0px solid white;
+}

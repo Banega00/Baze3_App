@@ -1,0 +1,47 @@
+<div class="main-container">
+    <div class="header-div">
+        <h1>Klijenti</h1>
+        <button (click)="addNewKlijent()" class="dodaj" color="primary" mat-raised-button>
+            <mat-icon>add</mat-icon>
+            Dodaj novog klijenta
+        </button>
+        <!-- <button class="dodaj" mat-raised-button color="primary">Dodaj Model</button> -->
+    </div>
+    <mat-spinner *ngIf="loading" mode="indeterminate"></mat-spinner>
+    <div class="klijenti-container" *ngIf="!loading">
+        
+        <mat-card *ngIf="addingNew" class="card">
+            <mat-card-content class="card-content">
+                <div class="edit-container">
+                    <mat-form-field class="example-full-width">
+                        <mat-label>Ime</mat-label>
+                        <input matInput [(ngModel)]="noviKlijent.ime">
+                    </mat-form-field>
+                    <mat-form-field class="example-full-width">
+                        <mat-label>JMBG</mat-label>
+                        <input matInput [(ngModel)]="noviKlijent.jmbg">
+                    </mat-form-field>
+                    <mat-form-field class="example-full-width">
+                        <mat-label>Broj lične karte</mat-label>
+                        <input matInput [(ngModel)]="noviKlijent.br_lk">
+                    </mat-form-field>
+                </div>
+        
+                <div class="controls">
+        
+                    <mat-icon (click)="saveNewKlijent()" fontIcon="save" #tooltip="matTooltip"
+                        matTooltip="Sačuvaj" matTooltipPosition="below"></mat-icon>
+        
+                    <mat-icon (click)="cancelNewKlijent()" fontIcon="cancel" #tooltip="matTooltip"
+                        matTooltip="Poništi" matTooltipPosition="below"></mat-icon>
+        
+                </div>
+            </mat-card-content>
+        </mat-card>
+        
+        
+        <ng-container *ngFor="let klijent of klijenti">
+            <app-klijent [klijent]="klijent" (deleteKlijentEmiiter)="deleteKlijent($event)"></app-klijent>
+        </ng-container>
+    </div>
+</div>

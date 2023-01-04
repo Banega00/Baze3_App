@@ -11,6 +11,9 @@ import { ModeliTabComponent } from './pages/vozila-page/modeli-tab/modeli-tab.co
 import { VozilaTabComponent } from './pages/vozila-page/vozila-tab/vozila-tab.component';
 import { ServisneKnjigeTabComponent } from './pages/vozila-page/servisne-knjige-tab/servisne-knjige-tab.component';
 import { HttpClientModule } from '@angular/common/http';
+import { KlijentiTabComponent } from './pages/klijenti-page/klijenti-tab/klijenti-tab.component';
+import { KlijentComponent } from './pages/klijenti-page/klijenti-tab/klijent/klijent.component';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -20,6 +23,8 @@ import { HttpClientModule } from '@angular/common/http';
     ModeliTabComponent,
     VozilaTabComponent,
     ServisneKnjigeTabComponent,
+    KlijentiTabComponent,
+    KlijentComponent,
   ],
   imports: [
     BrowserModule,
@@ -27,7 +32,8 @@ import { HttpClientModule } from '@angular/common/http';
     LayoutModule,
     AngularMaterialModuleModule,
     AppRoutingModule,
-    HttpClientModule
+    HttpClientModule,
+    FormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

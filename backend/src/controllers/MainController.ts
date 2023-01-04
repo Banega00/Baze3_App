@@ -3,6 +3,7 @@ import { ErrorStatusCode, SuccessStatusCode } from "../../../shared-items/status
 import { db } from "../database/connection";
 import { sendResponse} from "../utils/send-response";
 import { MarkaVozilaModel } from '@shared-items/models/marka-vozila.model';
+import { KlijentModel } from '@shared-items/models/klijent.model';
 
 export class MainController{
     constructor() {
@@ -40,5 +41,54 @@ export class MainController{
             sendResponse({response, code: ErrorStatusCode.UNKNOWN_ERROR, status: 500})
         }
         
+    }
+
+    getKlijenti = async (request: Request, response: Response, next: NextFunction) => {
+        try{
+            const query = `SELECT * FROM klijent`
+            const db_response = await db.query(query);
+            sendResponse({response, code: SuccessStatusCode.OK, status: 200, payload: db_response.rows})
+        }catch(error){
+            console.log(error);
+            sendResponse({response, code: ErrorStatusCode.UNKNOWN_ERROR, status: 500})
+        }
+        
+    }
+
+    updateKlijent = async (request: Request, response: Response, next: NextFunction) => {
+        try{
+            const klijent: KlijentModel = request.body; 
+            const query = `UPDATE klijent SET ime=$1 , br_lk=$2 WHERE jmbg=$3`
+            await db.query(query, [klijent.ime, klijent.br_lk, klijent.jmbg]);
+            sendResponse({response, code: SuccessStatusCode.OK, status: 200})
+        }catch(error){
+            console.log(error);
+            sendResponse({response, code: ErrorStatusCode.UNKNOWN_ERROR, status: 500})
+        }
+        
+    }
+
+    addNewKlijent = async (request: Request, response: Response, next: NextFunction) => {
+        try{
+            const klijent: KlijentModel = request.body; 
+            const query = `INSERT INTO klijent (jmbg, ime, br_lk) VALUES ($1,$2,$3)`
+            await db.query(query, [klijent.jmbg, klijent.ime, klijent.br_lk]);
+            sendResponse({response, code: SuccessStatusCode.OK, status: 201})
+        }catch(error:any){
+            console.log(error);
+            sendResponse({response, code: ErrorStatusCode.UNKNOWN_ERROR, status: 500, message: error.message})
+        }
+    }
+
+    deleteKlijent = async (request: Request, response: Response, next: NextFunction) => {
+        try{
+            const jmbg: string = request.params.jmbg; 
+            const query = `DELETE FROM klijent WHERE jmbg = $1`
+            await db.query(query, [jmbg]);
+            sendResponse({response, code: SuccessStatusCode.OK, status: 201})
+        }catch(error:any){
+            console.log(error);
+            sendResponse({response, code: ErrorStatusCode.UNKNOWN_ERROR, status: 500, message: error.message})
+        }
     }
 }

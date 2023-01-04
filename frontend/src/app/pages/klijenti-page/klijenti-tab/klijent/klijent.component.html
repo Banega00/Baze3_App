@@ -1,0 +1,39 @@
+<mat-card class="card">
+    <mat-card-content class="card-content">
+        <div *ngIf="!editMode">
+            <p class="ime-div"> 
+                <mat-icon *ngIf="!editMode" fontIcon="person"></mat-icon>
+                <b>{{klijent.ime}}</b></p>
+            <p *ngIf="!editMode">JMBG: <b>{{klijent.jmbg}}</b></p>
+            <p *ngIf="!editMode">Broj LK: <b>{{klijent.br_lk}}</b></p>
+        </div>
+        <div class="edit-container" *ngIf="editMode">
+            <mat-form-field *ngIf="editMode" class="example-full-width">
+                <mat-label>Ime</mat-label>
+                <input matInput [(ngModel)]="klijent.ime">
+            </mat-form-field>
+            <mat-form-field *ngIf="editMode" class="example-full-width">
+                <mat-label>JMBG</mat-label>
+                <input matInput [(ngModel)]="klijent.jmbg">
+            </mat-form-field>
+            <mat-form-field *ngIf="editMode" class="example-full-width">
+                <mat-label>Broj lične karte</mat-label>
+                <input matInput [(ngModel)]="klijent.br_lk">
+            </mat-form-field>
+        </div>
+
+        <div class="controls">
+            <mat-icon *ngIf="!editMode" (click)="editMode = true" fontIcon="edit" #tooltip="matTooltip"
+                matTooltip="Izmeni" matTooltipPosition="below"></mat-icon>
+
+            <mat-icon (click)="deleteKlijent()" fontIcon="delete" #tooltip="matTooltip" matTooltip="Obriši" matTooltipPosition="below"></mat-icon>
+
+            <mat-icon *ngIf="editMode" (click)="saveEditChanges()" fontIcon="save" #tooltip="matTooltip"
+                matTooltip="Sačuvaj" matTooltipPosition="below"></mat-icon>
+
+            <mat-icon *ngIf="editMode" (click)="cancelEditChanges()" fontIcon="cancel" #tooltip="matTooltip"
+                matTooltip="Poništi" matTooltipPosition="below"></mat-icon>
+
+        </div>
+    </mat-card-content>
+</mat-card>
