@@ -7,23 +7,14 @@ import { MarkaVozilaModel } from '../../../../../../shared-items/models/marka-vo
   templateUrl: './modeli-tab.component.html',
   styleUrls: ['./modeli-tab.component.css']
 })
-export class ModeliTabComponent implements OnInit {
+export class ModeliTabComponent{
 
   panelOpenState = false;
 
+  @Input()
   markeVozila: MarkaVozilaModel[] = []
-  
-  loading = true;
 
   constructor(private httpService: HttpService) {
     
-  }
-
-  ngOnInit(): void {
-    this.httpService.getMarkeIModeliVozila()
-    .subscribe(data => {
-      this.markeVozila = data.payload!;
-      this.loading = false;
-    })
   }
 }

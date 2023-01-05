@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { MarkaVozilaModel } from '@shared-items/models/marka-vozila.model';
 import { CustomResponse } from '../../../shared-items/custom-response.model'
 import { KlijentModel } from '@shared-items/models/klijent.model';
+import { VoziloModel } from '@shared-items/models/vozilo.model';
 @Injectable({
   providedIn: 'root'
 })
@@ -28,6 +29,10 @@ export class HttpService {
 
   deleteKlijent(jmbg: string){
     return this.http.delete<CustomResponse<any>>(`${this.host}/klijent/${jmbg}`)
+  }
+  
+  getVozila(){
+    return this.http.get<CustomResponse<VoziloModel[]>>(`${this.host}/vozila`)
   }
   
   sendGetRequest(url: string) {

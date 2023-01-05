@@ -11,6 +11,7 @@
     display: flex;
     align-items: center;
     font-size: 1.2em;
+    margin-bottom: 0.5rem;
 }
 
 .controls{

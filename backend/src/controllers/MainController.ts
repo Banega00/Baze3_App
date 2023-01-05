@@ -107,19 +107,6 @@ export class MainController{
             
             const db_response = await db.query(query);
 
-            db_response.rows = db_response.rows.map(row => {
-                row.registarski_broj = {
-                    grad: row.grad,
-                    oznaka_grada: row.oznaka_grada,
-                    broj: row.broj
-                }
-
-                delete row.grad;
-                delete row.oznaka_grada;
-                delete row.broj;
-                return row;
-            })
-
             sendResponse({response, code: SuccessStatusCode.OK, status: 200, payload: db_response.rows})
         }catch(error){
             console.log(error);
