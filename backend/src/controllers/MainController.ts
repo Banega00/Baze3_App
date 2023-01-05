@@ -91,4 +91,40 @@ export class MainController{
             sendResponse({response, code: ErrorStatusCode.UNKNOWN_ERROR, status: 500, message: error.message})
         }
     }
+
+    getVozila = async (request: Request, response: Response, next: NextFunction) => {
+        try{
+            const query = `SELECT v.broj_sasije, v.broj_osiguranja, 
+            (registarski_broj).grad, 
+            (registarski_broj).oznaka_grada, 
+            (registarski_broj).broj,
+            v.godiste, v.model_id, v.marka_id,
+            mv.id, mv.naziv as naziv_marke, m.naziv, m.oznaka, m.id, m.marka_id
+            FROM vozilo v 
+            JOIN model m ON v.model_id = m.id  AND v.marka_id = m.marka_id
+            JOIN marka_vozila mv ON m.marka_id = mv.id;`;
+
+            
+            const db_response = await db.query(query);
+
+            db_response.rows = db_response.rows.map(row => {
+                row.registarski_broj = {
+                    grad: row.grad,
+                    oznaka_grada: row.oznaka_grada,
+                    broj: row.broj
+                }
+
+                delete row.grad;
+                delete row.oznaka_grada;
+                delete row.broj;
+                return row;
+            })
+
+            sendResponse({response, code: SuccessStatusCode.OK, status: 200, payload: db_response.rows})
+        }catch(error){
+            console.log(error);
+            sendResponse({response, code: ErrorStatusCode.UNKNOWN_ERROR, status: 500})
+        }
+        
+    }
 }
