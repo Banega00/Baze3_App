@@ -15,5 +15,7 @@ router.delete('/klijent/:jmbg', mainController.deleteKlijent)
 
 //VOZILA
 router.get('/vozila', mainController.getVozila)
+router.post('/vozilo', mainController.saveVozilo)
+router.delete('/vozilo/:broj_sasije', mainController.deleteVozilo)
 
 export const main_router = router;
