@@ -28,4 +28,8 @@ router.get('/ulice', mainController.getUlice)
 router.post('/ulica', mainController.saveUlica)
 router.delete('/ulica', mainController.deleteUlica)
 
+//IZVESTAJI
+router.get('/izvestaji', mainController.getIzvestaji)
+router.put('/izvestaji', mainController.updateIzvestaj)
+
 export const main_router = router;

@@ -1,1 +1,36 @@
-<p>izvestaji-page works!</p>
+<div class="main-container">
+    <div class="header-div">
+        <h1>Servisni izveštaji</h1>
+
+
+    </div>
+    <div class="cards">
+        <mat-card *ngFor="let izvestaj of izvestaji">
+            <mat-card-content>
+                <div class="card-header">
+                    <h2>ID: {{izvestaj.id}}</h2>
+                    <h3>Izveštaj za radni nalog: {{izvestaj.radni_nalog_id}}</h3>
+                    Datum isporuke: {{moment(izvestaj.datum_isporuke).format('DD-MM-YYYY')}}
+                </div>
+                <hr style="margin: 0.5rem 0">
+
+                <div><b>Napomena: </b>{{izvestaj.napomena}}</div>
+                <div><b>Tačka mržnjenja antifriza: </b>{{izvestaj.antifriz_tacka_mrz}}</div>
+                <div><b>Viskozitet kočionog ulja: </b>{{izvestaj.viskozitet_kocionog_ulja}}</div>
+                <hr style="margin: 0.5rem 0">
+
+                <div><b>Radnik isporučio:</b> {{izvestaj.radnik_isporucio}}</div>
+                <div><b>Radnik referisao:</b> {{izvestaj.radnik_referisao}}</div>
+
+                <div class="hidden-div">
+                    Promeni tačku mržnjenja antifriza za:
+                    <mat-form-field class="example-full-width">
+                        <mat-label>Stepeni celzijusa</mat-label>
+                        <input id="input" type="number" matInput>
+                    </mat-form-field>
+                    <button class="dodaj" (click)="promeni(izvestaj.id)" mat-raised-button color="primary">Promeni</button>
+                </div>
+            </mat-card-content>
+        </mat-card>
+    </div>
+</div>

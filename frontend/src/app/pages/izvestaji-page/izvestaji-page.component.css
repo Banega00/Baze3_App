@@ -1,0 +1,29 @@
+.main-container{
+    padding: 5rem
+}
+
+.cards{
+    display: flex;
+    width: 100%;
+    flex-wrap: wrap;
+}
+
+.cards > * {
+    width: 30%;
+    margin-right: 2rem;
+    margin-bottom: 2rem;
+}
+
+.hidden-div{
+    display: none;
+    margin-top:2rem;
+}
+
+mat-card:hover .hidden-div{
+    display: block;
+}
+
+button.dodaj{
+    margin-right: 1rem;
+    margin-bottom: 1rem;
+}

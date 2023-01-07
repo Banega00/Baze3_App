@@ -402,4 +402,37 @@ export class MainController {
             sendResponse({ response, code: ErrorStatusCode.UNKNOWN_ERROR, status: 500, message: error.message })
         }
     }
+
+    getIzvestaji = async (request: Request, response: Response, next: NextFunction) => {
+        try {
+            const ulica = request.body;
+            let query = `SELECT si.*, r1.ime_prezime as radnik_isporucio, r2.ime_prezime as radnik_referisao
+            FROM servisni_izvestaj si 
+            JOIN radnik r1 ON si.radnik_isporucio=r1.jmbg
+            JOIN radnik r2 ON si.radnik_referisao=r2.jmbg`;
+
+            let db_response = await db.query(query)
+
+            sendResponse({ response, code: SuccessStatusCode.OK, status: 200, payload: db_response.rows })
+        } catch (error: any) {
+            // await db.query('ROLLBACK')
+            console.log(error);
+            sendResponse({ response, code: ErrorStatusCode.UNKNOWN_ERROR, status: 500, message: error.message })
+        }
+    }
+
+    updateIzvestaj = async (request: Request, response: Response, next: NextFunction) => {
+        try {
+            const {izvestaj_id, promena_za} = request.body;
+            let query = `SELECT increase_antifriz_tacka_mrz_by_n($1,$2)`;
+
+            let db_response = await db.query(query,[promena_za, izvestaj_id])
+
+            sendResponse({ response, code: SuccessStatusCode.OK, status: 200, payload: db_response.rows })
+        } catch (error: any) {
+            // await db.query('ROLLBACK')
+            console.log(error);
+            sendResponse({ response, code: ErrorStatusCode.UNKNOWN_ERROR, status: 500, message: error.message })
+        }
+    }
 }

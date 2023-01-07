@@ -88,4 +88,8 @@ export class HttpService {
   getIzvestaji() {
     return this.http.get<CustomResponse<any>>(`${this.host}/izvestaji`)
   }
+
+  changeAntifrizTackaMrz(izvestaj_id:number, promena_za:number) {
+    return this.http.put<CustomResponse<any>>(`${this.host}/izvestaji`,{izvestaj_id, promena_za})
+  }
 }
