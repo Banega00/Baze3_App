@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { KlijentModel } from '@shared-items/models/klijent.model';
 import { HttpService } from 'src/app/http.service';
 import { catchError } from 'rxjs/operators';
@@ -12,12 +12,16 @@ import { SimpleDialogComponent } from 'src/app/dialog-component/simple-dialog.co
 })
 export class KlijentiTabComponent {
 
+  @Input()
   public klijenti: KlijentModel[];
   public loading: boolean;
 
   public addingNew: boolean;
 
   public noviKlijent: KlijentModel;
+
+  @Input()
+  refreshState: any;
 
   constructor(private httpService: HttpService, private dialog: MatDialog) {
     this.klijenti = [];
@@ -34,14 +38,6 @@ export class KlijentiTabComponent {
     });
   }
 
-  ngOnInit(): void {
-    this.httpService.getKlijent()
-    .subscribe(data => {
-      this.klijenti = data.payload!;
-      this.loading = false;
-    })
-  }
-
   addNewKlijent(){
     if(this.addingNew) return;
     this.addingNew = true;
@@ -56,6 +52,7 @@ export class KlijentiTabComponent {
         this.klijenti.unshift(this.noviKlijent)
         this.addingNew = false;
         this.noviKlijent = {ime:'', jmbg:'', br_lk:''};
+        this.refreshState();
       },
       error: (error) => {
         this.openDialog('Greška prilikom dodavanja novog klijenta', error.error.message);
@@ -75,9 +72,10 @@ export class KlijentiTabComponent {
       next: (data) => {
         this.openDialog(`Uspešno obrisan klijent sa JMBG: ${jmbg}`);
         this.klijenti = this.klijenti.filter(klijent => klijent.jmbg != jmbg);
+        this.refreshState();
       },
       error: (error) => {
-        this.openDialog('Greška prilikom brosanja klijenta', error.error.message);
+        this.openDialog('Greška prilikom brisanja klijenta', error.error.message);
       }
    });
   }

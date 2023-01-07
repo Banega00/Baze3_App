@@ -1,0 +1,109 @@
+<div class="main-container">
+  <div class="header-div">
+    <!-- <h1>Vlasništva</h1> -->
+    <!-- <button class="dodaj" mat-raised-button color="primary">Dodaj Model</button> -->
+  </div>
+  <mat-accordion>
+    <mat-expansion-panel *ngFor="let vozilo of vlasnistva | keyvalue" (opened)="panelOpenState = true"
+      (closed)="panelOpenState = false">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          <b>{{vozilo.key}}</b>
+        </mat-panel-title>
+        <mat-panel-description>
+          Broj vlasnistva: {{vozilo.value.length}}
+
+          <button *ngIf="panelOpenState" class="dodaj" (click)="dodajVlasnistvo(vozilo.key, $event)" mat-raised-button color="primary">Dodaj vlasnistvo</button>
+
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+      <ul>
+        <li class="vlasnistvo-red header">
+          <div class="date">
+            <b>Vlasnik od</b>
+          </div>
+          <div class="date">
+            <b>
+              Vlasnik do
+            </b>
+          </div>
+          <div class="klijent">
+            <b>
+              Vlasnik
+            </b>
+          </div>
+          <div class="komande">
+            <b>
+            </b>
+          </div>
+        </li>
+        <li class="vlasnistvo-red" *ngFor="let vlasnistvo of vozilo.value; index as i;">
+
+          <div class="date">
+            <div *ngIf="!vlasnistvo.isEdit">
+              {{moment(vlasnistvo.datum_od).format('DD.MM.YYYY')}}
+            </div>
+            <mat-form-field *ngIf="vlasnistvo.isEdit"
+              appearance="fill">
+              <!-- <mat-label>Choose a date</mat-label> -->
+              <input (onChange)="datum_od_change($event, vlasnistvo)" (dateChange)="datum_od_change($event, vlasnistvo)" matInput [matDatepicker]="picker" [value]="vlasnistvo.datum_od">
+              <!-- <mat-hint>MM/DD/YYYY</mat-hint> -->
+              <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+              <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+          </div>
+          <div class="date">
+            <div *ngIf="!vlasnistvo.isEdit">
+              {{(moment(vlasnistvo.datum_do).isValid() ? moment(vlasnistvo.datum_do).format('DD.MM.YYYY') : '...')}}
+            </div>
+            <mat-form-field *ngIf="vlasnistvo.isEdit"
+              appearance="fill">
+              <!-- <mat-label>Choose a date</mat-label> -->
+              <input (onChange)="datum_do_change($event, vlasnistvo)" (dateChange)="datum_do_change($event, vlasnistvo)" matInput [matDatepicker]="picker" [value]="vlasnistvo.datum_do">
+              <!-- <mat-hint>MM/DD/YYYY</mat-hint> -->
+              <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+              <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+          </div>
+
+          <div class="klijent">
+            <div *ngIf="!vlasnistvo.isEdit">
+              {{vlasnistvo.ime_vlasnika}} <br>
+              {{vlasnistvo.klijent_id}}
+            </div>
+            <div *ngIf="vlasnistvo.isEdit">
+              <mat-form-field class="example-full-width" appearance="fill">
+                <mat-label>Klijent</mat-label>
+                <input type="text" [value]="vlasnistvo.ime_vlasnika" aria-label="Number" matInput
+                  [matAutocomplete]="auto">
+                <mat-autocomplete #auto="matAutocomplete">
+                  <mat-option *ngFor="let klijent of klijenti" [value]="klijent.jmbg">
+                    {{klijent.ime}} - {{klijent.jmbg}}
+                  </mat-option>
+                </mat-autocomplete>
+              </mat-form-field>
+
+            </div>
+          </div>
+          <div class="komande">
+            <div *ngIf="vlasnistvo.isEdit">
+              <mat-icon (click)="sacuvajIzmene(vlasnistvo)" fontIcon="save" #tooltip="matTooltip" matTooltip="Sačuvaj"
+                matTooltipPosition="below"></mat-icon>
+
+              <mat-icon (click)="ponistiIzmena(vlasnistvo, i)" fontIcon="cancel" #tooltip="matTooltip" matTooltip="Poništi"
+                matTooltipPosition="below"></mat-icon>
+            </div>
+            <div *ngIf="!vlasnistvo.isEdit">
+              <mat-icon (click)="izmeniVlasnistvo(vlasnistvo)" fontIcon="edit" #tooltip="matTooltip" matTooltip="Izmeni"
+                matTooltipPosition="below"></mat-icon>
+
+              <mat-icon (click)="obrisiVlasnistvo(vlasnistvo)" fontIcon="delete" #tooltip="matTooltip"
+                matTooltip="Obriši" matTooltipPosition="below"></mat-icon>
+            </div>
+
+          </div>
+        </li>
+      </ul>
+    </mat-expansion-panel>
+  </mat-accordion>
+</div>

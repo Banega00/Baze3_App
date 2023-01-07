@@ -7,8 +7,7 @@
         </button>
         <!-- <button class="dodaj" mat-raised-button color="primary">Dodaj Model</button> -->
     </div>
-    <mat-spinner class="spiner" *ngIf="loading" mode="indeterminate"></mat-spinner>
-    <div class="klijenti-container" *ngIf="!loading">
+    <div class="klijenti-container">
         
         <mat-card *ngIf="addingNew" class="card">
             <mat-card-content class="card-content">
@@ -41,7 +40,7 @@
         
         
         <ng-container *ngFor="let klijent of klijenti">
-            <app-klijent [klijent]="klijent" (deleteKlijentEmiiter)="deleteKlijent($event)"></app-klijent>
+            <app-klijent [refreshState]="refreshState" [klijent]="klijent" (deleteKlijentEmiiter)="deleteKlijent($event)"></app-klijent>
         </ng-container>
     </div>
 </div>

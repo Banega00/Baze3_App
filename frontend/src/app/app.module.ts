@@ -13,7 +13,8 @@ import { ServisneKnjigeTabComponent } from './pages/vozila-page/servisne-knjige-
 import { HttpClientModule } from '@angular/common/http';
 import { KlijentiTabComponent } from './pages/klijenti-page/klijenti-tab/klijenti-tab.component';
 import { KlijentComponent } from './pages/klijenti-page/klijenti-tab/klijent/klijent.component';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { VlasnistvaTabComponent } from './pages/klijenti-page/vlasnistva-tab/vlasnistva-tab.component';
 
 @NgModule({
   declarations: [
@@ -25,6 +26,7 @@ import { FormsModule } from '@angular/forms';
     ServisneKnjigeTabComponent,
     KlijentiTabComponent,
     KlijentComponent,
+    VlasnistvaTabComponent,
   ],
   imports: [
     BrowserModule,
@@ -33,7 +35,8 @@ import { FormsModule } from '@angular/forms';
     AngularMaterialModuleModule,
     AppRoutingModule,
     HttpClientModule,
-    FormsModule
+    FormsModule,
+    ReactiveFormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

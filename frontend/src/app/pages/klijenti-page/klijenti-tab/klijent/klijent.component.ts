@@ -16,6 +16,9 @@ export class KlijentComponent implements OnInit{
   @Input()
   editMode: boolean = false;
 
+  @Input()
+  refreshState: any;
+
   @Output() 
   deleteKlijentEmiiter = new EventEmitter<string>();
 
@@ -44,8 +47,12 @@ export class KlijentComponent implements OnInit{
       next: (data) => {
         this.openDialog('Uspešno ažurirani podaci o klijentu');
         this.klijentCopy = {...this.klijent};
+        this.refreshState()
       },
       error: (error) => {
+        console.log(error);
+        this.klijent = {...this.klijentCopy};
+        this.editMode = false;
         this.openDialog('Greška prilikom ažuriranja podataka o klijentu', error.error.message);
       }
    });
