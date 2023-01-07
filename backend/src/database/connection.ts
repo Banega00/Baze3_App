@@ -1,4 +1,4 @@
-import { Pool } from 'pg';
+import { Pool, QueryResult, QueryResultRow } from 'pg';
 
 const pool = new Pool({
     host: process.env.db_host,
@@ -11,3 +11,5 @@ const pool = new Pool({
 console.log('Successfully connected to database ✅')
 
 export const db = pool;
+
+

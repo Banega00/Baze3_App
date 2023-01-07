@@ -18,4 +18,9 @@ router.get('/vozila', mainController.getVozila)
 router.post('/vozilo', mainController.saveVozilo)
 router.delete('/vozilo/:broj_sasije', mainController.deleteVozilo)
 
+//VLASNISTVA
+router.get('/vlasnistva', mainController.getVlasnistva)
+router.delete('/vlasnistvo', mainController.deleteVlasnistvo)
+router.post('/vlasnistvo', mainController.saveVlanistvo)
+
 export const main_router = router;

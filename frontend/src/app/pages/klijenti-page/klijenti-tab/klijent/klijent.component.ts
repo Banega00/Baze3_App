@@ -1,6 +1,8 @@
+import { KeyValue } from '@angular/common';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { KlijentModel } from '@shared-items/models/klijent.model';
+import { VlasnistvoModel } from '@shared-items/models/vlasnistvo.model';
 import { SimpleDialogComponent } from 'src/app/dialog-component/simple-dialog.component';
 import { HttpService } from 'src/app/http.service';
 
@@ -66,4 +68,6 @@ export class KlijentComponent implements OnInit{
   deleteKlijent(){
     this.deleteKlijentEmiiter.emit(this.klijent.jmbg)
   }
+
+  
 }

@@ -1,5 +1,7 @@
+import { KeyValue } from '@angular/common';
 import { Component, Input, OnInit, Output, Type } from '@angular/core';
 import { FormControl } from '@angular/forms';
+import { MatAutocompleteActivatedEvent, MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { MatDialog } from '@angular/material/dialog';
 import { KlijentModel } from '@shared-items/models/klijent.model';
 import { VlasnistvoModel } from '@shared-items/models/vlasnistvo.model';
@@ -102,7 +104,7 @@ export class VlasnistvaTabComponent implements OnInit {
   }
 
   dodajVlasnistvo(broj_sasije: string, event: Event){
-    console.log(broj_sasije);
+    this.vlasnistvaCopy = this.cloneVlanistvo(this.vlasnistva);
     event.stopImmediatePropagation();
     this.vlasnistva[broj_sasije].unshift({
       broj_sasije,
@@ -110,12 +112,17 @@ export class VlasnistvaTabComponent implements OnInit {
       datum_do: '',
       rb: 0,
       ime_vlasnika: '',
-      servisna_knjiga_id: this.vlasnistva[broj_sasije][0].servisna_knjiga_id,
+      servisna_knjiga_id: this.vlasnistva[broj_sasije][0]?.servisna_knjiga_id ?? null,
       klijent_id: '',
       original_klijent_id: '',
       isEdit: true,
       isNew: true
     })
+
+  }
+  
+  vlasnistvaDescOrder = (a: KeyValue<string, VlasnistvoModel[]>, b: KeyValue<string,VlasnistvoModel[]>): number => {
+    return b.value.length - a.value.length;
   }
 
   datum_do_change(event: any, vlasnistvo: typeof this.vlasnistva['any'][0]) {
@@ -126,6 +133,16 @@ export class VlasnistvaTabComponent implements OnInit {
   datum_od_change(event: any, vlasnistvo: typeof this.vlasnistva['any'][0]) {
     vlasnistvo.datum_od = new Date(event.target.value).toISOString();    
     console.log(vlasnistvo)
+  }
+
+  klijent_change(vlasnistvo:typeof this.vlasnistva['any'][0], event: Event | MatAutocompleteSelectedEvent){
+    const matEvent = event as MatAutocompleteSelectedEvent;
+    const klijent_id = matEvent.option.value;
+
+    const klijent = this.klijenti.find(klijent => klijent.jmbg == klijent_id);
+
+    vlasnistvo.klijent_id = klijent?.jmbg!
+    vlasnistvo.ime_vlasnika = klijent?.ime!
   }
 
   ngOnInit(): void {

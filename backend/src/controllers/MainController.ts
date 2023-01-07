@@ -5,6 +5,8 @@ import { sendResponse} from "../utils/send-response";
 import { MarkaVozilaModel } from '@shared-items/models/marka-vozila.model';
 import { KlijentModel } from '@shared-items/models/klijent.model';
 import { VoziloModel } from '@shared-items/models/vozilo.model';
+import { VlasnistvoModel } from '@shared-items/models/vlasnistvo.model';
+import { formatDate } from "../utils/helper-functions";
 
 export class MainController{
     constructor() {
@@ -99,10 +101,12 @@ export class MainController{
             (registarski_broj).oznaka_grada, 
             (registarski_broj).broj,
             v.godiste, v.model_id, v.marka_id,
+            sk.id as servisna_knjiga_id,
             mv.id, mv.naziv as naziv_marke, m.naziv, m.oznaka, m.id, m.marka_id
             FROM vozilo v 
             JOIN model m ON v.model_id = m.id  AND v.marka_id = m.marka_id
-            JOIN marka_vozila mv ON m.marka_id = mv.id;`;
+            JOIN marka_vozila mv ON m.marka_id = mv.id
+            LEFT JOIN servisna_knjiga sk ON sk.broj_sasije = v.broj_sasije;`;
 
             
             
@@ -136,7 +140,7 @@ export class MainController{
 
             
             
-            let db_response = await db.query(query, [vozilo.broj_sasije]);
+            let db_response = await db.query(query, [vozilo.original_broj_sasije]);
 
             if(db_response.rows.length >= 1){
                 query = `
@@ -185,5 +189,129 @@ export class MainController{
             sendResponse({response, code: ErrorStatusCode.UNKNOWN_ERROR, status: 500, message: error.message})
         }
         
+    }
+
+    getVlasnistva = async (request: Request, response: Response, next: NextFunction) => {
+        try{
+            const query = `SELECT *
+            FROM vlasnistvo v RIGHT JOIN vozilo ON vozilo.broj_sasije = v.broj_sasije`;
+            
+            const db_response = await db.query(query);
+
+            const vlasnistvaPoVozilu:any = {};
+
+            db_response.rows.forEach(row =>{
+                
+                if(vlasnistvaPoVozilu[row.broj_sasije]){
+                    if(row.klijent_id == null) return;
+                    vlasnistvaPoVozilu[row.broj_sasije].push(row);
+                }else{
+                    if(row.klijent_id == null) {
+                        vlasnistvaPoVozilu[row.broj_sasije] = [];
+                    }else{
+                        vlasnistvaPoVozilu[row.broj_sasije] = [row];
+                    }
+                }
+
+            })
+
+            for(const broj_sasije in vlasnistvaPoVozilu){
+                const vlasnistvaNiz = vlasnistvaPoVozilu[broj_sasije].sort((el1:any, el2:any) => {
+                    return el2.datum_od - el1.datum_od; 
+                })
+            }
+
+            sendResponse({response, code: SuccessStatusCode.OK, status: 200, payload: vlasnistvaPoVozilu})
+        }catch(error:any){
+            console.log(error);
+            sendResponse({response, code: ErrorStatusCode.UNKNOWN_ERROR, status: 500, message: error.message})
+        }
+    }
+
+    deleteVlasnistvo = async (request: Request, response: Response, next: NextFunction) => {
+        try{
+            const vlasnistvo:VlasnistvoModel = request.body;
+            const query = `DELETE FROM vlasnistvo 
+            WHERE rb=$1 AND servisna_knjiga_id=$2 AND broj_sasije=$3 AND klijent_id=$4`;
+            
+            const db_response = await db.query(query, [vlasnistvo.rb, vlasnistvo.servisna_knjiga_id, vlasnistvo.broj_sasije, vlasnistvo.klijent_id]) 
+
+            sendResponse({response, code: SuccessStatusCode.OK, status: 200})
+        }catch(error:any){
+            console.log(error);
+            sendResponse({response, code: ErrorStatusCode.UNKNOWN_ERROR, status: 500, message: error.message})
+        }
+    }
+
+    saveVlanistvo = async (request: Request, response: Response, next: NextFunction) => {
+        try{
+            const vlasnistvo: (VlasnistvoModel & { isEdit: boolean, isNew?: boolean }) = request.body;
+            
+            vlasnistvo.datum_od = formatDate(vlasnistvo.datum_od)
+            vlasnistvo.datum_do = formatDate(vlasnistvo.datum_do)
+
+            let query = '';
+            await db.query('BEGIN')
+
+            if(vlasnistvo.isNew){
+                //Proveri da li klijent postoji
+                query = 'SELECT * FROM klijent WHERE jmbg = $1;';
+
+                let db_response = await db.query(query, [vlasnistvo.klijent_id]);
+                
+                if(db_response.rows.length <= 0){
+                    //Klijent ne postoji
+                    query = 'INSERT INTO klijent(jmbg, ime) VALUES($1,$2);';
+                    db_response = await db.query(query, [vlasnistvo.klijent_id, vlasnistvo.ime_vlasnika]); 
+                }
+
+                query = `SELECT sk.id FROM vozilo JOIN servisna_knjiga sk ON sk.broj_sasije = vozilo.broj_sasije
+                    WHERE vozilo.broj_sasije = $1`;
+
+                db_response = await db.query(query, [vlasnistvo.broj_sasije]);
+                const servisna_knjiga_id = db_response.rows[0]?.id;
+
+                if(!servisna_knjiga_id){
+                    throw new Error('Vozilo nema servisnu knjigu')
+                }
+
+                vlasnistvo.servisna_knjiga_id = servisna_knjiga_id
+                
+                //Proveri da li je taj klijent vec imao vlasnistva zbog rb-a
+                query = `SELECT * FROM vlasnistvo WHERE servisna_knjiga_id=$1 AND broj_sasije=$2 AND klijent_id=$3;`
+                db_response = await db.query(query, [ vlasnistvo.servisna_knjiga_id, vlasnistvo.broj_sasije, vlasnistvo.klijent_id]) 
+
+                const rb = db_response.rows.length + 1;
+
+                query = `
+                INSERT INTO vlasnistvo(rb, servisna_knjiga_id, broj_sasije,
+                    klijent_id, datum_od, datum_do, ime_vlasnika)
+                    VALUES($1,$2,$3,$4,$5,$6,$7)`
+
+                db_response = await db.query(query, [vlasnistvo.rb, vlasnistvo.servisna_knjiga_id, vlasnistvo.broj_sasije, 
+                    vlasnistvo.klijent_id, vlasnistvo.datum_od, vlasnistvo.datum_do, vlasnistvo.ime_vlasnika]) 
+
+                await db.query('COMMIT')
+            }else{
+                query = `UPDATE vlasnistvo 
+                    SET datum_od=$1, datum_do=$2
+                    WHERE rb=$3 AND servisna_knjiga_id=$4 AND broj_sasije=$5 AND klijent_id=$6`
+
+                const parameters = [vlasnistvo.datum_od, vlasnistvo.datum_do, 
+                    vlasnistvo.rb, vlasnistvo.servisna_knjiga_id, vlasnistvo.broj_sasije, 
+                    vlasnistvo.klijent_id]
+
+                const db_response = await db.query(query, parameters) 
+
+                await db.query('COMMIT')
+            }
+            
+
+            sendResponse({response, code: SuccessStatusCode.OK, status: 200})
+        }catch(error:any){
+            // await db.query('ROLLBACK')
+            console.log(error);
+            sendResponse({response, code: ErrorStatusCode.UNKNOWN_ERROR, status: 500, message: error.message})
+        }
     }
 }

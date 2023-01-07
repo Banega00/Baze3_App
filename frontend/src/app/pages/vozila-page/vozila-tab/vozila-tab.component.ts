@@ -182,7 +182,6 @@ export class VozilaTabComponent implements OnInit{
   }
 
   model_i_marka_changed(element:any){
-    console.log("AAAA")
     const [model_naziv, marka_naziv] = element.model_i_marka.split(' ');
     const {marka, model} = this.nadjiMarkuIModel(model_naziv,marka_naziv)!;
 

@@ -8,6 +8,8 @@ import cors from 'cors';
 
 const app = express();
 
+process.env.TZ = 'UTC'
+
 app.use(cors())
 app.use(express.json())
 const PORT = process.env.PORT || 3000;
@@ -19,3 +21,8 @@ app.listen(PORT, () => {
 });
 
 db.query('SELECT 1')
+db.query("SET TIME ZONE 'UTC'", (err, result)=>{
+  db.query("SHOW TIME ZONE", (err, result)=>{
+    console.log(result.rows)
+  })
+})

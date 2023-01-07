@@ -4,20 +4,22 @@
     <!-- <button class="dodaj" mat-raised-button color="primary">Dodaj Model</button> -->
   </div>
   <mat-accordion>
-    <mat-expansion-panel *ngFor="let vozilo of vlasnistva | keyvalue" (opened)="panelOpenState = true"
+    <mat-expansion-panel *ngFor="let vozilo of vlasnistva | keyvalue: vlasnistvaDescOrder" 
+      (opened)="panelOpenState = true"
       (closed)="panelOpenState = false">
       <mat-expansion-panel-header>
         <mat-panel-title>
           <b>{{vozilo.key}}</b>
         </mat-panel-title>
         <mat-panel-description>
-          Broj vlasnistva: {{vozilo.value.length}}
+          Broj vlasništva: {{vozilo.value.length}}
 
-          <button *ngIf="panelOpenState" class="dodaj" (click)="dodajVlasnistvo(vozilo.key, $event)" mat-raised-button color="primary">Dodaj vlasnistvo</button>
+          
 
         </mat-panel-description>
       </mat-expansion-panel-header>
       <ul>
+        <button class="dodaj" (click)="dodajVlasnistvo(vozilo.key, $event)" mat-raised-button color="primary">Dodaj vlasnistvo</button>
         <li class="vlasnistvo-red header">
           <div class="date">
             <b>Vlasnik od</b>
@@ -74,9 +76,9 @@
             <div *ngIf="vlasnistvo.isEdit">
               <mat-form-field class="example-full-width" appearance="fill">
                 <mat-label>Klijent</mat-label>
-                <input type="text" [value]="vlasnistvo.ime_vlasnika" aria-label="Number" matInput
+                <input (change)="klijent_change(vlasnistvo, $event)" type="text" [value]="vlasnistvo.ime_vlasnika" aria-label="Number" matInput
                   [matAutocomplete]="auto">
-                <mat-autocomplete #auto="matAutocomplete">
+                <mat-autocomplete (optionSelected)="klijent_change(vlasnistvo, $event)" #auto="matAutocomplete">
                   <mat-option *ngFor="let klijent of klijenti" [value]="klijent.jmbg">
                     {{klijent.ime}} - {{klijent.jmbg}}
                   </mat-option>
