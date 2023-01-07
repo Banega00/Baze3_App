@@ -15,6 +15,8 @@ import { KlijentiTabComponent } from './pages/klijenti-page/klijenti-tab/klijent
 import { KlijentComponent } from './pages/klijenti-page/klijenti-tab/klijent/klijent.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { VlasnistvaTabComponent } from './pages/klijenti-page/vlasnistva-tab/vlasnistva-tab.component';
+import { UlicePageComponent } from './pages/ulice-page/ulice-page.component';
+import { IzvestajiPageComponent } from './pages/izvestaji-page/izvestaji-page.component';
 
 @NgModule({
   declarations: [
@@ -27,6 +29,8 @@ import { VlasnistvaTabComponent } from './pages/klijenti-page/vlasnistva-tab/vla
     KlijentiTabComponent,
     KlijentComponent,
     VlasnistvaTabComponent,
+    UlicePageComponent,
+    IzvestajiPageComponent,
   ],
   imports: [
     BrowserModule,

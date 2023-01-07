@@ -1,0 +1,109 @@
+<div class="main-container">
+    <div class="header-div">
+        <h1>Ulice</h1>
+        <button class="dodaj"(click)="addingNew=true" mat-raised-button color="primary">Dodaj ulicu</button>
+        <!-- <button class="dodaj" mat-raised-button color="primary">Dodaj Model</button> -->
+    </div>
+    <div *ngIf="addingNew" class="addingNew">
+        <mat-form-field appearance="fill">
+            <mat-label>Država</mat-label>
+            <mat-select (selectionChange)="izabraoDrzavu($event)">
+                <mat-option *ngFor="let drzava of drzave" [value]="drzava">
+                    {{drzava.naziv}}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+            <mat-label>Grad</mat-label>
+            <mat-select (selectionChange)="izabraoGrad($event)" [disabled]="izabranaDrzava == null" >
+                <mat-option *ngFor="let grad of filtriraniGradovi" [value]="grad">
+                    {{grad.naziv}}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+        <mat-form-field class="">
+            <mat-label>Naziv ulice</mat-label>
+            <input id="nazivUliceInput" matInput>
+          </mat-form-field>
+          <button class="dodaj"(click)="sacuvajUlicu()" mat-raised-button color="primary">Sačuvaj</button>
+
+          <button class="dodaj"(click)="ponistiDodavanjeUlice()" mat-raised-button color="primary">Poništi</button>
+
+    </div>
+    <mat-accordion *ngIf="ulice">
+        <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false">
+            <mat-expansion-panel-header>
+                <mat-panel-title>
+                    <b class="drzava-naziv">Srbija</b>
+                </mat-panel-title>
+                <mat-panel-description>
+                    Broj ulica: {{ulice.ulice_srbija.length}}
+                </mat-panel-description>
+            </mat-expansion-panel-header>
+            <ul>
+                <li class="ulica-div" *ngFor="let ulica of ulice.ulice_srbija; index as i;">
+                    <mat-icon (click)="deleteUlica(ulica)" fontIcon="delete" #tooltip="matTooltip" matTooltip="Obriši"
+                        matTooltipPosition="below"></mat-icon>
+                    {{ulica.naziv}} | {{ ulica.grad}}
+                </li>
+            </ul>
+        </mat-expansion-panel>
+    </mat-accordion>
+    <mat-accordion *ngIf="ulice">
+        <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false">
+            <mat-expansion-panel-header>
+                <mat-panel-title>
+                    <b class="drzava-naziv">Hrvatska</b>
+                </mat-panel-title>
+                <mat-panel-description>
+                    Broj ulica: {{ulice.ulice_hrvatska.length}}
+                </mat-panel-description>
+            </mat-expansion-panel-header>
+            <ul>
+                <li class="ulica-div" *ngFor="let ulica of ulice.ulice_hrvatska; index as i;">
+                    <mat-icon (click)="deleteUlica(ulica)" fontIcon="delete" #tooltip="matTooltip" matTooltip="Obriši"
+                        matTooltipPosition="below"></mat-icon>
+                    {{ulica.naziv}} | {{ ulica.grad}}
+                </li>
+            </ul>
+        </mat-expansion-panel>
+    </mat-accordion>
+    <mat-accordion *ngIf="ulice">
+        <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false">
+            <mat-expansion-panel-header>
+                <mat-panel-title>
+                    <b class="drzava-naziv">Makedonija</b>
+                </mat-panel-title>
+                <mat-panel-description>
+                    Broj ulica: {{ulice.ulice_makedonija.length}}
+                </mat-panel-description>
+            </mat-expansion-panel-header>
+            <ul>
+                <li class="ulica-div" *ngFor="let ulica of ulice.ulice_makedonija; index as i;">
+                    <mat-icon (click)="deleteUlica(ulica)" fontIcon="delete" #tooltip="matTooltip" matTooltip="Obriši"
+                        matTooltipPosition="below"></mat-icon>
+                    {{ulica.naziv}} | {{ ulica.grad}}
+                </li>
+            </ul>
+        </mat-expansion-panel>
+    </mat-accordion>
+    <mat-accordion *ngIf="ulice">
+        <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false">
+            <mat-expansion-panel-header>
+                <mat-panel-title>
+                    <b class="drzava-naziv">Ostale države</b>
+                </mat-panel-title>
+                <mat-panel-description>
+                    Broj ulica: {{ulice.ulice_ostale_drzave.length}}
+                </mat-panel-description>
+            </mat-expansion-panel-header>
+            <ul>
+                <li class="ulica-div" *ngFor="let ulica of ulice.ulice_ostale_drzave; index as i;">
+                    <mat-icon (click)="deleteUlica(ulica)" fontIcon="delete" #tooltip="matTooltip" matTooltip="Obriši"
+                        matTooltipPosition="below"></mat-icon>
+                    {{ulica.naziv}} | {{ ulica.grad}} | {{ulica.drzava}}
+                </li>
+            </ul>
+        </mat-expansion-panel>
+    </mat-accordion>
+</div>

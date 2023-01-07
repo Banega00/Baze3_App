@@ -72,4 +72,20 @@ export class HttpService {
   saveVlasnistvo(vlasnistvo: VlasnistvoModel & { isEdit: boolean; }) {
     return this.http.post<CustomResponse<any>>(`${this.host}/vlasnistvo`, vlasnistvo)
   }
+
+  getUlice() {
+    return this.http.get<CustomResponse<any>>(`${this.host}/ulice`)
+  }
+
+  deleteUlica(ulica:any) {
+    return this.http.delete<CustomResponse<any>>(`${this.host}/ulica`,{body: ulica})
+  }
+
+  saveUlica(ulica:any) {
+    return this.http.post<CustomResponse<any>>(`${this.host}/ulica`,ulica)
+  }
+
+  getIzvestaji() {
+    return this.http.get<CustomResponse<any>>(`${this.host}/izvestaji`)
+  }
 }

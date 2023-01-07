@@ -1,6 +1,8 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
+import { IzvestajiPageComponent } from '../pages/izvestaji-page/izvestaji-page.component';
 import { KlijentiPageComponent } from '../pages/klijenti-page/klijenti-page.component';
+import { UlicePageComponent } from '../pages/ulice-page/ulice-page.component';
 import { VozilaPageComponent } from '../pages/vozila-page/vozila-page.component';
 
 // import { Page2Component } from './page2/page2.component';
@@ -9,9 +11,10 @@ import { VozilaPageComponent } from '../pages/vozila-page/vozila-page.component'
 const routes: Routes = [
   { path: 'klijenti', component: KlijentiPageComponent },
   { path: 'vozila', component: VozilaPageComponent },
-  // { path: 'page3', component: Page3Component },
-  { path: '', redirectTo: '/page1', pathMatch: 'full' },
-  { path: '**', redirectTo: '/page1', pathMatch: 'full' },
+  { path: 'ulice', component: UlicePageComponent },
+  { path: 'izvestaji', component: IzvestajiPageComponent },
+  { path: '', redirectTo: '/klijenti', pathMatch: 'full' },
+  { path: '**', redirectTo: '/klijenti', pathMatch: 'full' },
 ];
 
 @NgModule({

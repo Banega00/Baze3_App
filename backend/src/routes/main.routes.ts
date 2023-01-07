@@ -23,4 +23,9 @@ router.get('/vlasnistva', mainController.getVlasnistva)
 router.delete('/vlasnistvo', mainController.deleteVlasnistvo)
 router.post('/vlasnistvo', mainController.saveVlanistvo)
 
+//ULICE
+router.get('/ulice', mainController.getUlice)
+router.post('/ulica', mainController.saveUlica)
+router.delete('/ulica', mainController.deleteUlica)
+
 export const main_router = router;

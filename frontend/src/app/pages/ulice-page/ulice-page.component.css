@@ -1,0 +1,40 @@
+.main-container{
+    padding: 5rem
+}
+
+button.dodaj{
+    margin-right: 1rem;
+    margin-bottom: 1rem;
+}
+
+.header-div{
+    display: flex;
+}
+
+.header-div h1{
+    margin-right: 2rem;
+}
+
+.spiner{
+    margin:auto;
+}
+
+.drzava-naziv{
+    font-size: 1.5rem;
+}
+
+.ulica-div{
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.5rem;
+}
+
+.ulica-div mat-icon{
+    cursor: pointer;
+    transition: all .2s;
+}
+
+.ulica-div mat-icon:hover{
+    transform: scale(1.15);
+}   
