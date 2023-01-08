@@ -478,4 +478,18 @@ export class MainController {
             sendResponse({ response, code: ErrorStatusCode.UNKNOWN_ERROR, status: 500, message: error.message })
         }
     }
+
+    getRadnici = async (request: Request, response: Response, next: NextFunction) => {
+        try {
+            let query = `SELECT * FROM radnik`;
+
+            let db_response = await db.query(query);
+
+            sendResponse({ response, code: SuccessStatusCode.OK, status: 200, payload: db_response.rows })
+        } catch (error: any) {
+            // await db.query('ROLLBACK')
+            console.log(error);
+            sendResponse({ response, code: ErrorStatusCode.UNKNOWN_ERROR, status: 500, message: error.message })
+        }
+    }
 }

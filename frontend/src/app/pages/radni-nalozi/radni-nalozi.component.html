@@ -6,6 +6,10 @@
         <mat-icon>add</mat-icon>
         Kreiraj novi Radni nalog
     </button>
+
+    <div *ngIf="kreiranjeNovogRN">
+        KREIRANJE NOVOG
+    </div>
     <div class="cards">
         <mat-card *ngFor="let radniNalog of radniNalozi">
             <mat-card-content>
@@ -54,7 +58,12 @@
                 <div class ="osnovni_pregled_div">
                     <mat-icon aria-hidden="false" aria-label="Example home icon" fontIcon="info"></mat-icon>
 
-                    Napomena: {{radniNalog.napomena}}
+                    Napomena: {{radniNalog.napomena ?? '/'}}
+                </div>
+                <div class ="osnovni_pregled_div">
+                    <mat-icon aria-hidden="false" aria-label="Example home icon" fontIcon="info"></mat-icon>
+
+                    Odobreno putem: {{radniNalog.odobreno_putem ?? '/'}}
                 </div>
 
                 <mat-divider style="margin: 0.5rem 0"></mat-divider>

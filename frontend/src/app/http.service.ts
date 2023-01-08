@@ -100,4 +100,8 @@ export class HttpService {
   deleteRadniNalog(id: number) {
     return this.http.delete<CustomResponse<any>>(`${this.host}/radni-nalog/${id}`)
   }
+
+  getRadnici() {
+    return this.http.get<CustomResponse<any>>(`${this.host}/radnici`)
+  }
 }
