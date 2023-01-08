@@ -5,6 +5,7 @@ import express from 'express';
 import { db } from './database/connection';
 import { main_router } from './routes/main.routes';
 import cors from 'cors';
+import { insertMockVehicles } from './utils/helper-functions';
 
 const app = express();
 
@@ -26,3 +27,5 @@ db.query("SET TIME ZONE 'UTC'", (err, result)=>{
     console.log(result.rows)
   })
 })
+
+// insertMockVehicles(1000);

@@ -33,8 +33,8 @@ export class HttpService {
     return this.http.delete<CustomResponse<any>>(`${this.host}/klijent/${jmbg}`)
   }
   
-  getVozila(){
-    return this.http.get<CustomResponse<VoziloModel[]>>(`${this.host}/vozila`)
+  getVozila(params?:any){
+    return this.http.get<CustomResponse<VoziloModel[]>>(`${this.host}/vozila`,{params})
   }
 
   saveVehicle(vehicle: VoziloModel){

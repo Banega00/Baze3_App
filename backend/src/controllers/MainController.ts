@@ -96,7 +96,11 @@ export class MainController {
 
     getVozila = async (request: Request, response: Response, next: NextFunction) => {
         try {
-            const query = `SELECT v.broj_sasije, v.broj_osiguranja, 
+            let {godiste_od, godiste_do, broj_sasije} = request.query;
+            broj_sasije = broj_sasije ? `${broj_sasije}%` : '%'
+            const params:any[] = [godiste_od ?? 0, godiste_do ?? 3000, broj_sasije];
+
+            let query = `SELECT v.broj_sasije, v.broj_osiguranja, 
             (registarski_broj).grad, 
             (registarski_broj).oznaka_grada, 
             (registarski_broj).broj,
@@ -106,11 +110,13 @@ export class MainController {
             FROM vozilo v 
             JOIN model m ON v.model_id = m.id  AND v.marka_id = m.marka_id
             JOIN marka_vozila mv ON m.marka_id = mv.id
-            LEFT JOIN servisna_knjiga sk ON sk.broj_sasije = v.broj_sasije;`;
+            LEFT JOIN servisna_knjiga sk ON sk.broj_sasije = v.broj_sasije
+            WHERE godiste >= $1
+            AND godiste <= $2
+            AND v.broj_sasije LIKE $3`;
 
 
-
-            const db_response = await db.query(query);
+            const db_response = await db.query(query, params);
 
             db_response.rows = db_response.rows.map(row => {
                 row.marka = {

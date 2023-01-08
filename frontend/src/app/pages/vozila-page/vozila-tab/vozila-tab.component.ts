@@ -50,6 +50,8 @@ export class VozilaTabComponent implements OnInit{
 
   public displayedColumns: string[];
 
+  panelOpenState = false;
+
   ngOnInit(): void {
     if(this.markeVozila && this._vozila){
       this.columnsSchema = [
@@ -95,7 +97,21 @@ export class VozilaTabComponent implements OnInit{
   }
 
   constructor(private httpService: HttpService, private dialog: MatDialog) {
-    
+  }
+
+  pretrazi(){
+    const broj_sasije = (document.querySelector('#input-broj-sasije') as any).value.toUpperCase();
+    const godiste_od = +(document.querySelector('#input-godiste-od') as any).value;
+    const godiste_do = +(document.querySelector('#input-godiste-do') as any).value || 3000;
+    this.httpService.getVozila({broj_sasije, godiste_od, godiste_do})
+    .subscribe({
+      next: (data) => {
+        this.vozila = data.payload!;
+      },
+      error: (error) => {
+        this.openDialog('Greška prilikom pretrage vozila', error.error.message);
+      }}
+    )
   }
   
   openDialog(title: string, message: string = '') {

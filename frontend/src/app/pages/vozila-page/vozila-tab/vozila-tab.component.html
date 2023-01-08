@@ -5,6 +5,33 @@
                 <mat-icon>add</mat-icon>
                 Dodaj novo vozilo
             </button>
+            <mat-accordion>
+                <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false">
+                    <mat-expansion-panel-header>
+                        <mat-panel-title>
+                            Pretraga vozila
+                        </mat-panel-title>
+                        <mat-panel-description>
+                            {{vozila.length}}
+                        </mat-panel-description>
+                    </mat-expansion-panel-header>
+                    <mat-form-field class="example-full-width">
+                        <mat-label>Broj šasije</mat-label>
+                        <input id="input-broj-sasije" matInput>
+                    </mat-form-field>
+                    <mat-form-field class="example-full-width">
+                        <mat-label>Godište od</mat-label>
+                        <input id="input-godiste-od" type="number" matInput>
+                    </mat-form-field>
+                    <mat-form-field class="example-full-width">
+                        <mat-label>Godište do</mat-label>
+                        <input id="input-godiste-do" type="number" matInput>
+                    </mat-form-field>
+                    <button (click)="pretrazi()" class="dodaj" color="primary" mat-raised-button>
+                        <mat-icon>search</mat-icon>
+                    </button>
+                </mat-expansion-panel>
+            </mat-accordion>
             <article>
                 <table mat-table [dataSource]="_vozila">
                     <ng-container [matColumnDef]="col.key" *ngFor="let col of columnsSchema">
@@ -14,10 +41,10 @@
                         <td mat-cell *matCellDef="let element">
                             <div [ngSwitch]="col.type" *ngIf="!element.isEdit">
                                 <div class="btn-edit" *ngSwitchCase="'isEdit'">
-                                    <mat-icon (click)="izmeni(element)" fontIcon="edit"
-                                        #tooltip="matTooltip" matTooltip="Izmeni" matTooltipPosition="below"></mat-icon>
-                                    <mat-icon (click)=obrisi(element) fontIcon="delete" #tooltip="matTooltip" matTooltip="Obriši"
-                                        matTooltipPosition="below"></mat-icon>
+                                    <mat-icon (click)="izmeni(element)" fontIcon="edit" #tooltip="matTooltip"
+                                        matTooltip="Izmeni" matTooltipPosition="below"></mat-icon>
+                                    <mat-icon (click)=obrisi(element) fontIcon="delete" #tooltip="matTooltip"
+                                        matTooltip="Obriši" matTooltipPosition="below"></mat-icon>
 
                                 </div>
                                 <span *ngSwitchDefault>
@@ -32,21 +59,21 @@
                                     <mat-icon (click)="ponisti(element)" fontIcon="cancel" #tooltip="matTooltip"
                                         matTooltip="Poništi" matTooltipPosition="below"></mat-icon>
 
-                                    <mat-icon (click)="obrisi(element)" fontIcon="delete" #tooltip="matTooltip" matTooltip="Obriši"
-                                        matTooltipPosition="below"></mat-icon>
+                                    <mat-icon (click)="obrisi(element)" fontIcon="delete" #tooltip="matTooltip"
+                                        matTooltip="Obriši" matTooltipPosition="below"></mat-icon>
                                 </div>
                                 <ng-template #dataField>
                                     <mat-form-field class="mat-input" *ngIf="col.key != 'model_i_marka'">
 
 
-                                        <input [type]="col.type" matInput
-                                            [(ngModel)]="element[col.key]" />
+                                        <input [type]="col.type" matInput [(ngModel)]="element[col.key]" />
 
                                     </mat-form-field>
 
                                     <mat-form-field *ngIf="col.key == 'model_i_marka'">
 
-                                        <mat-select (selectionChange)="model_i_marka_changed(element)" [(ngModel)]="element[col.key]">
+                                        <mat-select (selectionChange)="model_i_marka_changed(element)"
+                                            [(ngModel)]="element[col.key]">
                                             <mat-option *ngFor="let marka_model of makre_i_modeli"
                                                 [value]="marka_model">{{marka_model}}</mat-option>
                                         </mat-select>
