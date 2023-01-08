@@ -17,6 +17,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { VlasnistvaTabComponent } from './pages/klijenti-page/vlasnistva-tab/vlasnistva-tab.component';
 import { UlicePageComponent } from './pages/ulice-page/ulice-page.component';
 import { IzvestajiPageComponent } from './pages/izvestaji-page/izvestaji-page.component';
+import { RadniNaloziComponent } from './pages/radni-nalozi/radni-nalozi.component';
 
 @NgModule({
   declarations: [
@@ -31,6 +32,7 @@ import { IzvestajiPageComponent } from './pages/izvestaji-page/izvestaji-page.co
     VlasnistvaTabComponent,
     UlicePageComponent,
     IzvestajiPageComponent,
+    RadniNaloziComponent,
   ],
   imports: [
     BrowserModule,

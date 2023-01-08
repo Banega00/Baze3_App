@@ -32,4 +32,9 @@ router.delete('/ulica', mainController.deleteUlica)
 router.get('/izvestaji', mainController.getIzvestaji)
 router.put('/izvestaji', mainController.updateIzvestaj)
 
+//RADNI NALOG
+router.get('/radni-nalozi', mainController.getRadniNalozi)
+router.delete('/radni-nalog/:id', mainController.deleteRadniNalog)
+
+
 export const main_router = router;

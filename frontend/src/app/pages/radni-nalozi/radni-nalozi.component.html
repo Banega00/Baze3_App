@@ -1,0 +1,71 @@
+<div class="main-container">
+    <div class="header-div">
+        <h1>Radni nalozi</h1>
+    </div>
+    <button (click)="kreirajRN()" class="dodaj" color="primary" mat-raised-button>
+        <mat-icon>add</mat-icon>
+        Kreiraj novi Radni nalog
+    </button>
+    <div class="cards">
+        <mat-card *ngFor="let radniNalog of radniNalozi">
+            <mat-card-content>
+                <div class="card-header">
+                    <h2>ID: {{radniNalog.id}}</h2>
+                    <h4> Radni nalog za vozilo: {{radniNalog.broj_sasije}}</h4>
+                </div>
+                <mat-divider style="margin: 0.5rem 0"></mat-divider>
+
+                <div>
+                    Datum prijema: {{moment(radniNalog.datum_prijem).format('DD-MM-YYYY')}}
+                </div>
+                <div>
+                    Datum isporuke: {{moment(radniNalog.datum_isporuke).format('DD-MM-YYYY')}}
+                </div>
+                <!-- <div><b>Napomena: </b>{{izvestaj.napomena}}</div>
+                <div><b>Tačka mržnjenja antifriza: </b>{{izvestaj.antifriz_tacka_mrz}}</div>
+                <div><b>Viskozitet kočionog ulja: </b>{{izvestaj.viskozitet_kocionog_ulja}}</div> -->
+
+                <mat-divider style="margin: 0.5rem 0"></mat-divider>
+
+                <div>
+                    Kilometraža na prijemu: {{radniNalog.km_prijem}}
+                </div>
+                <div>
+                    Kilometraža na isporuci: {{radniNalog.km_prijem}}
+                </div>
+
+                <mat-divider style="margin: 0.5rem 0"></mat-divider>
+
+                <div class ="osnovni_pregled_div">
+                    <mat-icon aria-hidden="false" *ngIf="radniNalog.osnovni_pregled" aria-label="Example home icon" fontIcon="check"></mat-icon>
+                    <mat-icon aria-hidden="false" *ngIf="!radniNalog.osnovni_pregled" aria-label="Example home icon" fontIcon="cancel"></mat-icon>
+                    <div>
+                        Osnovni pregled izvršen
+                    </div>
+                </div>
+                <div class ="osnovni_pregled_div">
+                    <mat-icon aria-hidden="false" *ngIf="radniNalog.spakovati_stare_delove" aria-label="Example home icon" fontIcon="check"></mat-icon>
+                    <mat-icon aria-hidden="false" *ngIf="!radniNalog.spakovati_stare_delove" aria-label="Example home icon" fontIcon="cancel"></mat-icon>
+                    <div>
+                        Spakovati stare delove
+                    </div>
+                </div>
+
+                <div class ="osnovni_pregled_div">
+                    <mat-icon aria-hidden="false" aria-label="Example home icon" fontIcon="info"></mat-icon>
+
+                    Napomena: {{radniNalog.napomena}}
+                </div>
+
+                <mat-divider style="margin: 0.5rem 0"></mat-divider>
+
+                <div><b>Radnik isporučio:</b> {{radniNalog.radnik_primio}}</div>
+                <div><b>Radnik referisao:</b> {{radniNalog.radnik_zaduzen}}</div>
+
+                <div class="hidden-div">
+                    <button class="dodaj" (click)="obrisiRN(radniNalog)" mat-raised-button color="primary">Obriši radni nalog</button>
+                </div>
+            </mat-card-content>
+        </mat-card>
+    </div>
+</div>

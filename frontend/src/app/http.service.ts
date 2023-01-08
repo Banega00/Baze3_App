@@ -89,7 +89,15 @@ export class HttpService {
     return this.http.get<CustomResponse<any>>(`${this.host}/izvestaji`)
   }
 
+  getRadniNalozi() {
+    return this.http.get<CustomResponse<any>>(`${this.host}/radni-nalozi`)
+  }
+
   changeAntifrizTackaMrz(izvestaj_id:number, promena_za:number) {
     return this.http.put<CustomResponse<any>>(`${this.host}/izvestaji`,{izvestaj_id, promena_za})
+  }
+
+  deleteRadniNalog(id: number) {
+    return this.http.delete<CustomResponse<any>>(`${this.host}/radni-nalog/${id}`)
   }
 }

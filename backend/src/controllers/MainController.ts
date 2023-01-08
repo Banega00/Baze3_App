@@ -441,4 +441,41 @@ export class MainController {
             sendResponse({ response, code: ErrorStatusCode.UNKNOWN_ERROR, status: 500, message: error.message })
         }
     }
+
+    getRadniNalozi = async (request: Request, response: Response, next: NextFunction) => {
+        try {
+            const {izvestaj_id, promena_za} = request.body;
+            let query = `
+            SELECT rn.*, r1.ime_prezime as radnik_primio, r2.ime_prezime as radnik_zaduzen
+            FROM radni_nalog_view rn
+            JOIN radnik r1 ON r1.jmbg = rn.radnik_primio
+            JOIN radnik r2 ON r2.jmbg = rn.radnik_zaduzen`;
+
+            let db_response = await db.query(query)
+
+            sendResponse({ response, code: SuccessStatusCode.OK, status: 200, payload: db_response.rows })
+        } catch (error: any) {
+            // await db.query('ROLLBACK')
+            console.log(error);
+            sendResponse({ response, code: ErrorStatusCode.UNKNOWN_ERROR, status: 500, message: error.message })
+        }
+    }
+    deleteRadniNalog = async (request: Request, response: Response, next: NextFunction) => {
+        try {
+            const id = request.params.id;
+            let query = `DELETE FROM radni_nalog WHERE id=$1`;
+
+            let db_response = await db.query(query,[id]);
+
+            if(db_response.rowCount < 1){
+                sendResponse({ response, code: ErrorStatusCode.UNKNOWN_ERROR, status: 404, message: `Radni nalog sa id:${id} nije pornađen` })
+            }
+
+            sendResponse({ response, code: SuccessStatusCode.OK, status: 200, payload: db_response.rows })
+        } catch (error: any) {
+            // await db.query('ROLLBACK')
+            console.log(error);
+            sendResponse({ response, code: ErrorStatusCode.UNKNOWN_ERROR, status: 500, message: error.message })
+        }
+    }
 }
