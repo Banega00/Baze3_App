@@ -39,10 +39,16 @@ router.post('/radni-nalog', mainController.createRadniNalog)
 
 //RADNICI
 router.get('/radnici', mainController.getRadnici);
+router.put('/radnik', mainController.updateRadnik);
+router.post('/radnik', mainController.addNewRadnik);
+router.delete('/radnik/:jmbg', mainController.deleteRadnik);
 
 //PONUDE
 router.get('/ponude',mainController.getPonude)
 router.post('/ponuda',mainController.savePonuda)
 router.delete('/ponuda/:id',mainController.deletePonuda)
+
+//POZICIJE
+router.get('/pozicije', mainController.getPozicije);
 
 export const main_router = router;

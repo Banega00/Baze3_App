@@ -4,6 +4,7 @@ import { IzvestajiPageComponent } from '../pages/izvestaji-page/izvestaji-page.c
 import { KlijentiPageComponent } from '../pages/klijenti-page/klijenti-page.component';
 import { PonudePageComponent } from '../pages/ponude-page/ponude-page.component';
 import { RadniNaloziComponent } from '../pages/radni-nalozi/radni-nalozi.component';
+import { RadniciPageComponent } from '../pages/radnici-page/radnici-page.component';
 import { UlicePageComponent } from '../pages/ulice-page/ulice-page.component';
 import { VozilaPageComponent } from '../pages/vozila-page/vozila-page.component';
 
@@ -17,6 +18,7 @@ const routes: Routes = [
   { path: 'izvestaji', component: IzvestajiPageComponent },
   { path: 'radni-nalozi', component: RadniNaloziComponent },
   { path: 'ponude', component: PonudePageComponent },
+  { path: 'radnici', component: RadniciPageComponent },
   { path: '', redirectTo: '/klijenti', pathMatch: 'full' },
   { path: '**', redirectTo: '/klijenti', pathMatch: 'full' },
 ];

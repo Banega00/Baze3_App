@@ -6,6 +6,7 @@ import { MarkaVozilaModel } from '@shared-items/models/marka-vozila.model';
 import { KlijentModel } from '@shared-items/models/klijent.model';
 import { VoziloModel } from '@shared-items/models/vozilo.model';
 import { VlasnistvoModel } from '@shared-items/models/vlasnistvo.model';
+import { RadnikModel } from '@shared-items/models/radnik.model';
 import { formatDate } from "../utils/helper-functions";
 
 export class MainController {
@@ -506,9 +507,14 @@ export class MainController {
 
     getRadnici = async (request: Request, response: Response, next: NextFunction) => {
         try {
-            let query = `SELECT * FROM radnik`;
+            let query = `SELECT * FROM radnik JOIN pozicija ON pozicija.id = radnik.pozicija_id;`;
 
             let db_response = await db.query(query);
+
+            // db_response.rows = db_response.rows.map(row => {
+            //     row.pozicija = { id: row.pozicija_id, naziv: row.naziv};
+            //     return row;
+            // })
 
             sendResponse({ response, code: SuccessStatusCode.OK, status: 200, payload: db_response.rows })
         } catch (error: any) {
@@ -573,6 +579,56 @@ export class MainController {
             sendResponse({ response, code: SuccessStatusCode.OK, status: 200, payload: db_response.rows })
         } catch (error: any) {
             // await db.query('ROLLBACK')
+            console.log(error);
+            sendResponse({ response, code: ErrorStatusCode.UNKNOWN_ERROR, status: 500, message: error.message })
+        }
+    }
+
+    getPozicije = async (request: Request, response: Response, next: NextFunction) => {
+        try {
+            let query = `SELECT * FROM pozicija`;
+
+            let db_response = await db.query(query);
+
+            sendResponse({ response, code: SuccessStatusCode.OK, status: 200, payload: db_response.rows })
+        } catch (error: any) {
+            // await db.query('ROLLBACK')
+            console.log(error);
+            sendResponse({ response, code: ErrorStatusCode.UNKNOWN_ERROR, status: 500, message: error.message })
+        }
+    }
+
+    updateRadnik = async (request: Request, response: Response, next: NextFunction) => {
+        try {
+            const radnik: RadnikModel = request.body;
+            const query = `UPDATE radnik SET ime_prezime=$1 , br_lk=$2, jmbg=$3, pozicija_id=$4 WHERE jmbg = $5`
+            await db.query(query, [radnik.ime_prezime, radnik.br_lk, radnik.jmbg, radnik.pozicija!.id, radnik.original_jmbg]);
+            sendResponse({ response, code: SuccessStatusCode.OK, status: 200 })
+        } catch (error: any) {
+            console.log(error);
+            sendResponse({ response, code: ErrorStatusCode.UNKNOWN_ERROR, status: 500, message: error.message })
+        }
+    }
+
+    deleteRadnik = async (request: Request, response: Response, next: NextFunction) => {
+        try {
+            const jmbg: string = request.params.jmbg;
+            const query = `DELETE FROM radnik WHERE jmbg = $1`
+            await db.query(query, [jmbg]);
+            sendResponse({ response, code: SuccessStatusCode.OK, status: 201 })
+        } catch (error: any) {
+            console.log(error);
+            sendResponse({ response, code: ErrorStatusCode.UNKNOWN_ERROR, status: 500, message: error.message })
+        }
+    }
+
+    addNewRadnik = async (request: Request, response: Response, next: NextFunction) => {
+        try {
+            const radnik: RadnikModel = request.body;
+            const query = `INSERT INTO radnik(ime_prezime, br_lk, jmbg, pozicija_id) VALUES ($1,$2,$3,$4)`
+            await db.query(query, [radnik.ime_prezime, radnik.br_lk, radnik.jmbg, radnik.pozicija!.id]);
+            sendResponse({ response, code: SuccessStatusCode.OK, status: 200 })
+        } catch (error: any) {
             console.log(error);
             sendResponse({ response, code: ErrorStatusCode.UNKNOWN_ERROR, status: 500, message: error.message })
         }

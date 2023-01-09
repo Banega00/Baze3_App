@@ -5,6 +5,7 @@ import { CustomResponse } from '../../../shared-items/custom-response.model'
 import { KlijentModel } from '@shared-items/models/klijent.model';
 import { VoziloModel } from '@shared-items/models/vozilo.model';
 import { VlasnistvoModel } from '@shared-items/models/vlasnistvo.model';
+import { RadnikModel } from '@shared-items/models/radnik.model';
 @Injectable({
   providedIn: 'root'
 })
@@ -119,5 +120,21 @@ export class HttpService {
 
   deletePonuda(id:any) {
     return this.http.delete<CustomResponse<any>>(`${this.host}/ponuda/${id}`)
+  }
+
+  deleteRadnik(jmbg: string){
+    return this.http.delete<CustomResponse<any>>(`${this.host}/radnik/${jmbg}`)
+  }
+
+  getPozicije(){
+    return this.http.get<CustomResponse<any>>(`${this.host}/pozicije`)
+  }
+
+  addNoviRadnik(radnik:RadnikModel){
+    return this.http.post<CustomResponse<any>>(`${this.host}/radnik`, radnik)
+  }
+
+  updateRadnik(data: RadnikModel){
+    return this.http.put(`${this.host}/radnik`, data)
   }
 }

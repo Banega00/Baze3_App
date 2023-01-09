@@ -19,6 +19,8 @@ import { UlicePageComponent } from './pages/ulice-page/ulice-page.component';
 import { IzvestajiPageComponent } from './pages/izvestaji-page/izvestaji-page.component';
 import { RadniNaloziComponent } from './pages/radni-nalozi/radni-nalozi.component';
 import { PonudePageComponent } from './pages/ponude-page/ponude-page.component';
+import { RadniciPageComponent } from './pages/radnici-page/radnici-page.component';
+import { RadnikComponent } from './pages/radnici-page/radnik/radnik.component';
 
 @NgModule({
   declarations: [
@@ -35,6 +37,8 @@ import { PonudePageComponent } from './pages/ponude-page/ponude-page.component';
     IzvestajiPageComponent,
     RadniNaloziComponent,
     PonudePageComponent,
+    RadniciPageComponent,
+    RadnikComponent,
   ],
   imports: [
     BrowserModule,
