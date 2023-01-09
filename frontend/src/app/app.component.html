@@ -2,15 +2,15 @@
     <mat-sidenav #drawer class="sidenav" fixedInViewport="true"
         [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'" [mode]="(isHandset$ | async) ? 'over' : 'side'"
         [opened]="(isHandset$ | async) === false">
-        <mat-toolbar>Menu</mat-toolbar>
+        <mat-toolbar></mat-toolbar>
         <mat-nav-list>
             <a mat-list-item routerLink="/klijenti">Klijenti</a>
             <a mat-list-item routerLink="/vozila">Vozila</a>
-            <a mat-list-item routerLink="/ulice">Ulice</a>
             <a mat-list-item routerLink="/izvestaji">Izveštaji</a>
             <a mat-list-item routerLink="/radni-nalozi">Radni nalozi</a>
             <a mat-list-item routerLink="/ponude">Ponude</a>
             <a mat-list-item routerLink="/radnici">Radnici</a>
+            <a mat-list-item routerLink="/ulice">Ulice</a>
         </mat-nav-list>
     </mat-sidenav>
 

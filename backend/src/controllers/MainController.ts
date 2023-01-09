@@ -7,6 +7,7 @@ import { KlijentModel } from '@shared-items/models/klijent.model';
 import { VoziloModel } from '@shared-items/models/vozilo.model';
 import { VlasnistvoModel } from '@shared-items/models/vlasnistvo.model';
 import { RadnikModel } from '@shared-items/models/radnik.model';
+import { ProizvodModel } from '@shared-items/models/proizvod.model';
 import { formatDate } from "../utils/helper-functions";
 
 export class MainController {
@@ -629,6 +630,93 @@ export class MainController {
             await db.query(query, [radnik.ime_prezime, radnik.br_lk, radnik.jmbg, radnik.pozicija!.id]);
             sendResponse({ response, code: SuccessStatusCode.OK, status: 200 })
         } catch (error: any) {
+            console.log(error);
+            sendResponse({ response, code: ErrorStatusCode.UNKNOWN_ERROR, status: 500, message: error.message })
+        }
+    }
+
+    getProizvodi = async (request: Request, response: Response, next: NextFunction) => {
+        try {
+            let query = `SELECT p.sifra, p.procenat_pdv, p.naziv, p.smestaj,
+            p.jedinica_mere_id, cp.id as cena_proizvoda_id, cp.valuta_id, cp.iznos, cp.datum_od, cp.datum_do,
+            v.naziv as valuta_naziv, v.id as valuta_id, v.oznaka as valuta_oznaka,
+            jm.naziv as jedinica_mere_naziv, jm.oznaka as jedinica_mere_oznaka, jm.mera_za
+            FROM proizvod p JOIN cena_proizvoda cp ON cp.proizvod_id = p.sifra
+            JOIN jedinica_mere jm ON jm.id = p.jedinica_mere_id
+            JOIN valuta v ON cp.valuta_id = v.id;`;
+
+            let db_response = await db.query(query);
+
+            const proizvodi: ProizvodModel[] = []
+
+            for(const row of db_response.rows){
+                const proizvod = proizvodi.find(proizvod => proizvod.sifra == row.sifra);
+
+                if(proizvod){
+                    proizvod.cene_proizvoda.push({
+                        datum_do: row.datum_od,
+                        datum_od: row.datum_do,
+                        id: row.cena_proizvoda_id,
+                        iznos: row.iznos,
+                        proizvod_id: row.sifra,
+                        valuta_id: row.valuta_id,
+                        valuta: { id: row.valuta_id, naziv: row.valuta_naziv, oznaka: row.valuta_oznaka}
+                    })
+                }else{
+                    proizvodi.push({
+                        cene_proizvoda: [{
+                            datum_do: row.datum_od,
+                            datum_od: row.datum_do,
+                            id: row.cena_proizvoda_id,
+                            iznos: row.iznos,
+                            proizvod_id: row.sifra,
+                            valuta_id: row.valuta_id,
+                            valuta: { id: row.valuta_id, naziv: row.valuta_naziv, oznaka: row.valuta_oznaka}
+                        }],
+                        jedinica_mere: {
+                            id: row.jedinica_mere_id,
+                            mera_za: row.mera_za,
+                            naziv: row.jedinica_mere_naziv,
+                            oznaka: row.jedinica_mere_oznaka
+                        },
+                        jedinica_mere_id: row.jedinica_mere_id,
+                        naziv: row.naziv,
+                        procenat_pdv: row.procenat_pdv,
+                        sifra: row.sifra,
+                        smestaj: row.smestaj
+                    })
+                }
+            }
+
+            sendResponse({ response, code: SuccessStatusCode.OK, status: 200, payload: proizvodi })
+        } catch (error: any) {
+            // await db.query('ROLLBACK')
+            console.log(error);
+            sendResponse({ response, code: ErrorStatusCode.UNKNOWN_ERROR, status: 500, message: error.message })
+        }
+    }
+
+    getJediniceMere = async (request: Request, response: Response, next: NextFunction) => {
+        try {
+            let query = `SELECT * FROM jedinica_mere;`;
+
+            let db_response = await db.query(query);
+            sendResponse({ response, code: SuccessStatusCode.OK, status: 200, payload: db_response.rows })
+        } catch (error: any) {
+            // await db.query('ROLLBACK')
+            console.log(error);
+            sendResponse({ response, code: ErrorStatusCode.UNKNOWN_ERROR, status: 500, message: error.message })
+        }
+    }
+
+    getValute = async (request: Request, response: Response, next: NextFunction) => {
+        try {
+            let query = `SELECT * FROM valuta;`;
+
+            let db_response = await db.query(query);
+            sendResponse({ response, code: SuccessStatusCode.OK, status: 200, payload: db_response.rows })
+        } catch (error: any) {
+            // await db.query('ROLLBACK')
             console.log(error);
             sendResponse({ response, code: ErrorStatusCode.UNKNOWN_ERROR, status: 500, message: error.message })
         }

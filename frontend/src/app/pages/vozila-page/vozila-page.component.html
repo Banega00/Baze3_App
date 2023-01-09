@@ -1,7 +1,6 @@
 <mat-spinner class="spiner" *ngIf="!markeVozila || !vozila" mode="indeterminate"></mat-spinner>
 
 <mat-tab-group *ngIf="(markeVozila && vozila)">
-    <mat-tab label="Servisne knjige"> <app-servisne-knjige-tab></app-servisne-knjige-tab></mat-tab>
     <mat-tab label="Vozila"> <app-vozila-tab [vozila]="vozila" [markeVozila]="markeVozila"></app-vozila-tab></mat-tab>
     <mat-tab label="Modeli"> <app-modeli-tab [markeVozila]="markeVozila"></app-modeli-tab> </mat-tab>
 </mat-tab-group>
