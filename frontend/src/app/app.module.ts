@@ -21,6 +21,8 @@ import { RadniNaloziComponent } from './pages/radni-nalozi/radni-nalozi.componen
 import { PonudePageComponent } from './pages/ponude-page/ponude-page.component';
 import { RadniciPageComponent } from './pages/radnici-page/radnici-page.component';
 import { RadnikComponent } from './pages/radnici-page/radnik/radnik.component';
+import { RacuniComponent } from './pages/racuni/racuni.component';
+import { StavkaRacunaComponent } from './pages/racuni/stavka-racuna/stavka-racuna.component';
 
 @NgModule({
   declarations: [
@@ -39,6 +41,8 @@ import { RadnikComponent } from './pages/radnici-page/radnik/radnik.component';
     PonudePageComponent,
     RadniciPageComponent,
     RadnikComponent,
+    RacuniComponent,
+    StavkaRacunaComponent,
   ],
   imports: [
     BrowserModule,

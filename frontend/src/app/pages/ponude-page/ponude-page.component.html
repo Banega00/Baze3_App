@@ -66,7 +66,7 @@
             <mat-card-content>
                 <div class="card-header">
                     <h2>ID: {{ponuda.id}}</h2>
-                    <h4> Datum {{moment(ponuda.datum).format('DD-MM-YYYY')}}</h4>
+                    <h4> Datum {{moment(ponuda.datum).format('DD.MM.YYYY')}}</h4>
                 </div>
                 <mat-divider style="margin: 0.5rem 0"></mat-divider>
 
@@ -74,7 +74,7 @@
                     Važi <b>{{ponuda.vazi_dana}}</b> dana
                 </div>
                 <div>
-                    Rok isporuke: {{moment(ponuda.rok_isporuke).format('DD-MM-YYYY')}}
+                    Rok isporuke: {{moment(ponuda.rok_isporuke).format('DD.MM.YYYY')}}
                 </div>
 
                 <mat-divider style="margin: 0.5rem 0"></mat-divider>

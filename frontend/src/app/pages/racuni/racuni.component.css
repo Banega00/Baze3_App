@@ -1,0 +1,76 @@
+.main-container{
+    padding: 5rem
+}
+
+.cards{
+    display: flex;
+    width: 100%;
+    flex-wrap: wrap;
+}
+
+.cards > * {
+    width: 100%;
+    margin-right: 2rem;
+    margin-bottom: 2rem;
+}
+
+.hidden-div{
+    display: none;
+}
+
+mat-card:hover .hidden-div{
+    display: block;
+}
+
+button.dodaj{
+    margin-right: 1rem;
+}
+
+.osnovni_pregled_div{
+    display: flex;
+    align-items: center;
+}
+
+.osnovni_pregled_div mat-icon{
+    margin-right: 0.5rem;
+}
+
+.novi-rn-div{
+    margin-bottom: 2rem;
+    width: 50vw;
+    padding: 1rem;
+}
+
+.novi-rn-div > * {
+    width: 100%;
+    display: flex;
+}
+
+.novi-rn-div > * > *{
+    flex: 1;
+}
+
+.datumi{
+    display: flex;
+    justify-content: space-between;
+}
+
+.ukupan-iznos-racuna{
+    font-weight: 600;
+}
+
+.card-header{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.stavka-header{
+    display: flex;
+    justify-content: space-between;
+    font-weight: 600;
+}
+
+.stavka-header > *{
+    flex: 1;
+}

@@ -1,0 +1,10 @@
+<div class="main-container">
+    <div>{{stavka.rb}}</div>
+    <div>{{stavka.proizvod.sifra}}</div>
+    <div>{{stavka.proizvod.naziv}}</div>
+    <div>{{(+(stavka.proizvod.cena ?? 0)).toFixed(2)}} {{stavka.proizvod.valuta?.oznaka}}</div>
+    <div>{{stavka.kolicina}}</div>
+    <div>{{stavka.proizvod.jedinica_mere.oznaka}}</div>
+    <div>{{stavka.proizvod.procenat_pdv}}%</div>
+    <div>{{stavka.procenat_rabat}}%</div>
+</div>

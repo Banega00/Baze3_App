@@ -51,6 +51,9 @@ router.delete('/ponuda/:id',mainController.deletePonuda)
 //POZICIJE
 router.get('/pozicije', mainController.getPozicije);
 
+//RACUNI
+router.get('/racuni', mainController.getRacuni)
+
 //PROIZVODI
 router.get('/proizvodi', mainController.getProizvodi)
 router.get('/jedinice-mere', mainController.getJediniceMere)

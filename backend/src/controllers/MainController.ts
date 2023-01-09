@@ -8,7 +8,9 @@ import { VoziloModel } from '@shared-items/models/vozilo.model';
 import { VlasnistvoModel } from '@shared-items/models/vlasnistvo.model';
 import { RadnikModel } from '@shared-items/models/radnik.model';
 import { ProizvodModel } from '@shared-items/models/proizvod.model';
+import { RacunModel } from '@shared-items/models/racun.model';
 import { formatDate } from "../utils/helper-functions";
+import { StavkaRacunaModel } from "@shared-items/models/stavka-racuna.model";
 
 export class MainController {
     constructor() {
@@ -637,11 +639,12 @@ export class MainController {
 
     getProizvodi = async (request: Request, response: Response, next: NextFunction) => {
         try {
-            let query = `SELECT p.sifra, p.procenat_pdv, p.naziv, p.smestaj,
+            let query = `SELECT p.sifra, aktuelna_cena(p.sifra) as aktuelna_cena, p.procenat_pdv, p.naziv, p.smestaj,
             p.jedinica_mere_id, cp.id as cena_proizvoda_id, cp.valuta_id, cp.iznos, cp.datum_od, cp.datum_do,
             v.naziv as valuta_naziv, v.id as valuta_id, v.oznaka as valuta_oznaka,
             jm.naziv as jedinica_mere_naziv, jm.oznaka as jedinica_mere_oznaka, jm.mera_za
-            FROM proizvod p JOIN cena_proizvoda cp ON cp.proizvod_id = p.sifra
+            FROM proizvod p 
+            JOIN cena_proizvoda cp ON cp.proizvod_id = p.sifra
             JOIN jedinica_mere jm ON jm.id = p.jedinica_mere_id
             JOIN valuta v ON cp.valuta_id = v.id;`;
 
@@ -653,7 +656,7 @@ export class MainController {
                 const proizvod = proizvodi.find(proizvod => proizvod.sifra == row.sifra);
 
                 if(proizvod){
-                    proizvod.cene_proizvoda.push({
+                    proizvod.cene_proizvoda!.push({
                         datum_do: row.datum_od,
                         datum_od: row.datum_do,
                         id: row.cena_proizvoda_id,
@@ -664,6 +667,7 @@ export class MainController {
                     })
                 }else{
                     proizvodi.push({
+                        aktuelna_cena: row.aktuelna_cena,
                         cene_proizvoda: [{
                             datum_do: row.datum_od,
                             datum_od: row.datum_do,
@@ -715,6 +719,101 @@ export class MainController {
 
             let db_response = await db.query(query);
             sendResponse({ response, code: SuccessStatusCode.OK, status: 200, payload: db_response.rows })
+        } catch (error: any) {
+            // await db.query('ROLLBACK')
+            console.log(error);
+            sendResponse({ response, code: ErrorStatusCode.UNKNOWN_ERROR, status: 500, message: error.message })
+        }
+    }
+
+    getRacuni = async (request: Request, response: Response, next: NextFunction) => {
+        try {
+            let query = `
+            SELECT r.id, r.datum_izdavanja, r.datum_prometa, r.ponuda_id,
+            radnik_f.ime_prezime AS radnik_fakturisao_ime,
+            radnik_n.ime_prezime AS radnik_naplatio_ime,
+            radnik_n.jmbg AS radnik_naplatio_jmbg,
+            radnik_n.jmbg AS radnik_naplatio_jmbg,
+            r.ukupan_iznos,
+            mesto_i.naziv as mesto_izdavanja,
+            mesto_p.naziv as mesto_prometa,
+            sr.rb, sr.racun_id, sr.kolicina, sr.procenat_rabat,
+            p.sifra, p.procenat_pdv, p.naziv, p.smestaj,
+            p.jedinica_mere_id, cp.id as cena_proizvoda_id, cp.valuta_id, cp.iznos, cp.datum_od, cp.datum_do,
+            v.naziv as valuta_naziv, v.id as valuta_id, v.oznaka as valuta_oznaka,
+            jm.naziv as jedinica_mere_naziv, jm.oznaka as jedinica_mere_oznaka, jm.mera_za
+            FROM racun r 
+            JOIN stavka_racuna sr ON sr.racun_id=id
+            JOIN proizvod p ON sr.proizvod_id = p.sifra
+            JOIN cena_proizvoda cp ON cp.proizvod_id = p.sifra
+            JOIN jedinica_mere jm ON jm.id = p.jedinica_mere_id
+            JOIN valuta v ON cp.valuta_id = v.id
+            JOIN radnik radnik_f ON radnik_f.jmbg=r.radnik_fakturisao
+            JOIN radnik radnik_n ON radnik_n.jmbg=r.radnik_naplatio
+            JOIN grad mesto_i ON mesto_i.id = r.mesto_izdavanja_grad AND mesto_i.drzava_id = r.mesto_izdavanja_drzava
+            JOIN grad mesto_p ON mesto_p.id = r.mesto_prometa_grad AND mesto_p.drzava_id = r.mesto_prometa_drzava
+			WHERE r.datum_prometa BETWEEN cp.datum_od AND COALESCE(cp.datum_do, NOW());`;
+
+            let db_response = await db.query(query);
+
+            const racuni: RacunModel[] = []
+
+            for(const row of db_response.rows){
+                const racun = racuni.find(racun => racun.id == row.id);
+
+                const stavka_racuna:StavkaRacunaModel = {
+                        kolicina: row.kolicina,
+                        proizvod_id: row.sifra,
+                        proizvod: {
+                            cena: row.iznos,
+                            valuta: {
+                                id: 0,
+                                naziv: row.valuta_naziv,
+                                oznaka: row.valuta_oznaka
+                            },
+                            naziv: row.naziv,
+                            smestaj: row.smestaj,
+                            sifra: row.sifra,
+                            procenat_pdv: row.procenat_pdv,
+                            jedinica_mere_id: row.jedinica_mere_id,
+                            jedinica_mere:{
+                                id: row.jedinica_mere_id,
+                                oznaka: row.jedinica_mere_oznaka,
+                                naziv: row.jedinica_mere_naziv,
+                                mera_za: row.mera_za
+                            }
+                        },
+                        rb: row.rb,
+                        racun_id: row.id,
+                        procenat_rabat: row.procenat_rabat,
+                    }
+
+                if(racun){
+                    racun.stavke_racuna.push(stavka_racuna)
+                }else{
+                    racuni.push({
+                        id: row.id,
+                        stavke_racuna: [stavka_racuna],
+                        datum_izdavanja: row.datum_izdavanja,
+                        datum_prometa: row.datum_prometa,
+                        mesto_izdavanja: row.mesto_izdavanja,
+                        mesto_prometa: row.mesto_prometa,
+                        radnik_fakturisao: {
+                            ime_prezime: row.radnik_fakturisao_ime,
+                            jmbg: row.radnik_fakturisao_jmbg
+                        },
+
+                        radnik_naplatio: {
+                            ime_prezime: row.radnik_naplatio_ime,
+                            jmbg: row.radnik_naplatio_jmbg
+                        },
+                        ponuda_id: row.ponuda_id,
+                        ukupan_iznos: row.ukupan_iznos
+                    })
+                }
+            }
+
+            sendResponse({ response, code: SuccessStatusCode.OK, status: 200, payload: racuni })
         } catch (error: any) {
             // await db.query('ROLLBACK')
             console.log(error);

@@ -1,0 +1,10 @@
+.main-container{
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    margin-bottom: .5rem;
+}
+
+.main-container > *{
+    flex: 1;
+}

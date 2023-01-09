@@ -5,6 +5,7 @@ import { CustomResponse } from '../../../shared-items/custom-response.model'
 import { KlijentModel } from '@shared-items/models/klijent.model';
 import { VoziloModel } from '@shared-items/models/vozilo.model';
 import { VlasnistvoModel } from '@shared-items/models/vlasnistvo.model';
+import { RacunModel } from '@shared-items/models/racun.model';
 import { RadnikModel } from '@shared-items/models/radnik.model';
 @Injectable({
   providedIn: 'root'
@@ -135,6 +136,10 @@ export class HttpService {
   }
 
   updateRadnik(data: RadnikModel){
-    return this.http.put(`${this.host}/radnik`, data)
+    return this.http.put<CustomResponse<any>>(`${this.host}/radnik`, data)
+  }
+
+  getRacuni(){
+    return this.http.get<CustomResponse<RacunModel[]>>(`${this.host}/racuni`)
   }
 }
