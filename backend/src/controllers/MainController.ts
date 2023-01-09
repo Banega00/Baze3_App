@@ -823,10 +823,41 @@ export class MainController {
 
     deleteRacun = async (request: Request, response: Response, next: NextFunction) => {
         try {
-            const id: string = request.params.id;
-            const query = `DELETE FROM racun WHERE id = $1`
-            await db.query(query, [id]);
-            sendResponse({ response, code: SuccessStatusCode.OK, status: 201 })
+            const stavka_racuna = request.body;
+            const query = `DELETE FROM racun WHERE racun_id = $1;`
+            await db.query(query, [stavka_racuna.racun_id]);
+            sendResponse({ response, code: SuccessStatusCode.OK, status: 200 })
+        } catch (error: any) {
+            console.log(error);
+            sendResponse({ response, code: ErrorStatusCode.UNKNOWN_ERROR, status: 500, message: error.message })
+        }
+    }
+
+    deleteStavka = async (request: Request, response: Response, next: NextFunction) => {
+        try {
+            const stavka_racuna = request.body;
+            const query = `DELETE FROM stavka_racuna WHERE rb = $1 AND racun_id = $2;`
+            await db.query(query, [stavka_racuna.rb, stavka_racuna.racun_id]);
+            sendResponse({ response, code: SuccessStatusCode.OK, status: 200 })
+        } catch (error: any) {
+            console.log(error);
+            sendResponse({ response, code: ErrorStatusCode.UNKNOWN_ERROR, status: 500, message: error.message })
+        }
+    }
+
+    dodajStavku = async (request: Request, response: Response, next: NextFunction) => {
+        try {
+            const stavka_racuna = request.body;
+
+            let rb = (await db.query(`SELECT MAX(rb) FROM stavka_racuna WHERE racun_id=$1`,[stavka_racuna.racun_id])).rows[0].max;
+
+            rb++;
+
+            const query = `
+            INSERT INTO stavka_racuna(rb, racun_id, kolicina, procenat_rabat, proizvod_id) 
+            VALUES ($1,$2,$3,$4,$5);`
+            await db.query(query, [rb, stavka_racuna.racun_id, stavka_racuna.kolicina, stavka_racuna.procenat_raba ?? 0, stavka_racuna.proizvod.sifra]);
+            sendResponse({ response, code: SuccessStatusCode.OK, status: 200 })
         } catch (error: any) {
             console.log(error);
             sendResponse({ response, code: ErrorStatusCode.UNKNOWN_ERROR, status: 500, message: error.message })

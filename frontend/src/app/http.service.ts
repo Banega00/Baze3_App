@@ -7,6 +7,8 @@ import { VoziloModel } from '@shared-items/models/vozilo.model';
 import { VlasnistvoModel } from '@shared-items/models/vlasnistvo.model';
 import { RacunModel } from '@shared-items/models/racun.model';
 import { RadnikModel } from '@shared-items/models/radnik.model';
+import { ProizvodModel } from '@shared-items/models/proizvod.model';
+import { StavkaRacunaModel } from '@shared-items/models/stavka-racuna.model';
 @Injectable({
   providedIn: 'root'
 })
@@ -142,8 +144,20 @@ export class HttpService {
   getRacuni(){
     return this.http.get<CustomResponse<RacunModel[]>>(`${this.host}/racuni`)
   }
-
+  
   obrisiRacun(id: number){
     return this.http.delete<CustomResponse<RacunModel[]>>(`${this.host}/racun/${id}`)
+  }
+
+  getProizvodi(){
+    return this.http.get<CustomResponse<ProizvodModel[]>>(`${this.host}/proizvodi`)
+  }
+
+  deleteStavkaRacuna(stavka:StavkaRacunaModel){
+    return this.http.delete<CustomResponse<any>>(`${this.host}/stavka-racuna`,{body:stavka})
+  }
+
+  saveNewStavka(stavka:StavkaRacunaModel){
+    return this.http.post<CustomResponse<any>>(`${this.host}/stavka-racuna`, stavka)
   }
 }

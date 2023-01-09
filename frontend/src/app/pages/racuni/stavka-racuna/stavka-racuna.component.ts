@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { StavkaRacunaModel } from '@shared-items/models/stavka-racuna.model';
 
 @Component({
@@ -11,5 +11,13 @@ export class StavkaRacunaComponent {
   @Input()
   stavka: StavkaRacunaModel;
 
+  @Input()
+  index: number;
 
+  @Output()
+  obrisiStavkuEE:EventEmitter<StavkaRacunaModel> = new EventEmitter();
+
+  obrisiStavku(){
+    return this.obrisiStavkuEE.next(this.stavka);
+  }
 }

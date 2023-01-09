@@ -107,11 +107,12 @@
                     <span class="ukupan-iznos-racuna">
                         {{(+(racun.ukupan_iznos ?? 0)).toFixed(2)}}
                         <span *ngIf="racun.stavke_racuna.length > 0">
-                            {{racun.stavke_racuna[0].proizvod.valuta?.oznaka}}
+                            {{racun.stavke_racuna[0].proizvod?.valuta?.oznaka}}
                         </span>
                     </span>
                 </div>
                 <mat-accordion>
+
                     <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false">
                         <mat-expansion-panel-header>
                             <mat-panel-title>
@@ -121,21 +122,58 @@
                                 Broj stavki: {{racun.stavke_racuna?.length ?? 0}}
                             </mat-panel-description>
                         </mat-expansion-panel-header>
-                        <ul>
-                            <div class="stavka-header">
-                                <div>RB</div>
-                                <div>Šifra proizvoda</div>
-                                <div>Proizvod</div>
-                                <div>Cena</div>
-                                <div>Količina</div>
-                                <div>Jedinica mere</div>
-                                <div>PDV</div>
-                                <div>Rabat</div>
+                        <button (click)="dodajNovuStavku(racun)" class="dodaj" color="primary" mat-raised-button>
+                            <mat-icon>add</mat-icon>
+                            Dodaj novu stavku
+                        </button>
+                        <div *ngIf="racun.addingNew">
+                            <div><b>Nova stavka</b></div>
+                            <mat-form-field appearance="fill">
+                                <mat-label>Proizvod</mat-label>
+                                <mat-select [(ngModel)]="racun.newStavka.proizvod">
+                                    <mat-option *ngFor="let proizvod of proizvodi" [value]="proizvod">
+                                        {{proizvod.naziv}}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                            <mat-form-field class="example-full-width">
+                                <mat-label>Količina</mat-label>
+                                <input [(ngModel)]="racun.newStavka.kolicina" id="input" type="number" matInput>
+                            </mat-form-field>
+                            <mat-form-field class="example-full-width">
+                                <mat-label>Rabat</mat-label>
+                                <input [(ngModel)]="racun.newStavka.procenat_rabat" id="input" type="number" matInput>
+                            </mat-form-field>
+                            <div>
+                                <button (click)="sacuvajNovuStavku(racun)" class="dodaj" color="primary" mat-raised-button>
+                                    <mat-icon>save</mat-icon>
+                                    Sačuvaj
+                                </button>
+                                <button (click)="ponistiNovuStavku(racun)" class="dodaj" color="primary" mat-raised-button>
+                                    <mat-icon>cancel</mat-icon>
+                                    Poništi
+                                </button>
                             </div>
-                            <li *ngFor="let stavka of racun.stavke_racuna; index as i;">
-                                <app-stavka-racuna [stavka]="stavka"></app-stavka-racuna>
-                            </li>
-                        </ul>
+                        </div>
+                        <mat-divider style="margin: 0.5rem 0"></mat-divider>
+
+                                <ul>
+                                    <div class="stavka-header">
+                                        <div>RB</div>
+                                        <div>Šifra proizvoda</div>
+                                        <div>Proizvod</div>
+                                        <div>Cena</div>
+                                        <div>Količina</div>
+                                        <div>Jedinica mere</div>
+                                        <div>PDV</div>
+                                        <div>Rabat</div>
+                                    </div>
+
+                                    <li *ngFor="let stavka of racun.stavke_racuna; index as i;">
+                                        <app-stavka-racuna (obrisiStavkuEE)="obrisiStavku(stavka)" [index]="i"
+                                            [stavka]="stavka"></app-stavka-racuna>
+                                    </li>
+                                </ul>
                     </mat-expansion-panel>
                 </mat-accordion>
 

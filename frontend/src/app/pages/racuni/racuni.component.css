@@ -74,3 +74,8 @@ button.dodaj{
 .stavka-header > *{
     flex: 1;
 }
+
+.dodaj{
+    margin-bottom: 1.2rem;
+    margin-left: auto;
+}

@@ -1,10 +1,12 @@
 <div class="main-container">
-    <div>{{stavka.rb}}</div>
-    <div>{{stavka.proizvod.sifra}}</div>
-    <div>{{stavka.proizvod.naziv}}</div>
-    <div>{{(+(stavka.proizvod.cena ?? 0)).toFixed(2)}} {{stavka.proizvod.valuta?.oznaka}}</div>
+    <div>{{index + 1}}</div>
+    <div>{{stavka.proizvod?.sifra}}</div>
+    <div>{{stavka.proizvod?.naziv}}</div>
+    <div>{{(+(stavka.proizvod?.cena ?? 0)).toFixed(2)}} {{stavka.proizvod?.valuta?.oznaka}}</div>
     <div>{{stavka.kolicina}}</div>
-    <div>{{stavka.proizvod.jedinica_mere.oznaka}}</div>
-    <div>{{stavka.proizvod.procenat_pdv}}%</div>
+    <div>{{stavka.proizvod?.jedinica_mere?.oznaka}}</div>
+    <div>{{stavka.proizvod?.procenat_pdv}}%</div>
     <div>{{stavka.procenat_rabat}}%</div>
+    <mat-icon (click)="obrisiStavku()" class="obrisi-btn" fontIcon="delete" #tooltip="matTooltip"
+    matTooltip="Obriši" matTooltipPosition="below"></mat-icon>
 </div>

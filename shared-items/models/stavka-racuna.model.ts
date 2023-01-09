@@ -4,6 +4,6 @@ export interface StavkaRacunaModel{
     racun_id?: number;
     kolicina: number;
     procenat_rabat: number;
-    proizvod: ProizvodModel;
-    proizvod_id: string;
+    proizvod: ProizvodModel | null;
+    proizvod_id: string | null;
 }
