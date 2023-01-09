@@ -7,4 +7,5 @@ export interface VlasnistvoModel{
     servisna_knjiga_id: number;
     klijent_id: string;
     original_klijent_id: string;
+    original_ime_vlasnika: string;
 }

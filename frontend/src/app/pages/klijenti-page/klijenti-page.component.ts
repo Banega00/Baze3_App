@@ -39,6 +39,7 @@ export class KlijentiPageComponent implements OnInit{
         vlasnistvaData[broj_sasije] = vlasnistvaData[broj_sasije].map((el:VlasnistvoModel & {isEdit:boolean}) => {
           el.isEdit = false;
           el.original_klijent_id = el.klijent_id;
+          el.original_ime_vlasnika = el.ime_vlasnika;
           return el;
         })
       }

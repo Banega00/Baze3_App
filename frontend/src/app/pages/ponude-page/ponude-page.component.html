@@ -82,8 +82,22 @@
                 <div>
                    <h4>Ponuda za radni nalog: {{ponuda.radni_nalog_id}}</h4>
                 </div>
-                <div>
+                <div *ngIf="!ponuda.edit_radnik">
                     Ponudu izdao: {{ponuda.ime_prezime_izdavaoca}}
+                    <mat-icon style="cursor: pointer;" (click)=izmeniRadnika(ponuda) fontIcon="edit" #tooltip="matTooltip"
+                                            matTooltip="Izmeni" matTooltipPosition="below"></mat-icon>
+                </div>
+                <div *ngIf="ponuda.edit_radnik">
+                    <mat-form-field  appearance="fill">
+                        <mat-label>Radnik izdao</mat-label>
+                        <mat-select [(ngModel)]="ponuda.novi_radnik">
+                            <mat-option *ngFor="let radnik of radnici" [value]="radnik">
+                                {{radnik.ime_prezime}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <mat-icon style="cursor: pointer;" (click)=sacuvajNovogRadnika(ponuda) fontIcon="save" #tooltip="matTooltip"
+                                            matTooltip="Sačuvaj" matTooltipPosition="below"></mat-icon>
                 </div>
 
                 <mat-divider style="margin: 0.5rem 0"></mat-divider>

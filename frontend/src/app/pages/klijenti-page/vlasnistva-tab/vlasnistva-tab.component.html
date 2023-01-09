@@ -73,7 +73,7 @@
             <div *ngIf="vlasnistvo.isEdit">
               <mat-form-field class="example-full-width" appearance="fill">
                 <mat-label>Klijent</mat-label>
-                <input (change)="klijent_change(vlasnistvo, $event)" type="text" [value]="vlasnistvo.ime_vlasnika" aria-label="Number" matInput
+                <input (change)="klijent_change(vlasnistvo, $event)" type="text" [(ngModel)]="vlasnistvo.ime_vlasnika" aria-label="Number" matInput
                   [matAutocomplete]="auto">
                 <mat-autocomplete (optionSelected)="klijent_change(vlasnistvo, $event)" #auto="matAutocomplete">
                   <mat-option *ngFor="let klijent of klijenti" [value]="klijent.jmbg">

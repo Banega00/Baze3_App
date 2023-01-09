@@ -303,13 +303,20 @@ export class MainController {
 
                 await db.query('COMMIT')
             } else {
+                if(vlasnistvo.ime_vlasnika != vlasnistvo.original_ime_vlasnika){
+                    query = `UPDATE vlasnistvo SET ime_vlasnika=$1 
+                    WHERE rb=$2 AND servisna_knjiga_id=$3 AND broj_sasije=$4 AND klijent_id=$5;`,
+                    await db.query(query, [vlasnistvo.ime_vlasnika,vlasnistvo.rb, 
+                        vlasnistvo.servisna_knjiga_id, vlasnistvo.broj_sasije,
+                        vlasnistvo.original_klijent_id]);
+                }
                 query = `UPDATE vlasnistvo 
-                    SET datum_od=$1, datum_do=$2
-                    WHERE rb=$3 AND servisna_knjiga_id=$4 AND broj_sasije=$5 AND klijent_id=$6`
+                    SET datum_od=$1, datum_do=$2, klijent_id=$3
+                    WHERE rb=$4 AND servisna_knjiga_id=$5 AND broj_sasije=$6 AND klijent_id=$7`
 
-                const parameters = [formatDate(vlasnistvo.datum_od), formatDate(vlasnistvo.datum_do),
+                const parameters = [formatDate(vlasnistvo.datum_od), formatDate(vlasnistvo.datum_do), vlasnistvo.klijent_id,
                 vlasnistvo.rb, vlasnistvo.servisna_knjiga_id, vlasnistvo.broj_sasije,
-                vlasnistvo.klijent_id]
+                vlasnistvo.original_klijent_id]
 
                 const db_response = await db.query(query, parameters)
 
@@ -319,7 +326,7 @@ export class MainController {
 
             sendResponse({ response, code: SuccessStatusCode.OK, status: 200 })
         } catch (error: any) {
-            // await db.query('ROLLBACK')
+            await db.query('ROLLBACK')
             console.log(error);
             sendResponse({ response, code: ErrorStatusCode.UNKNOWN_ERROR, status: 500, message: error.message })
         }
@@ -400,7 +407,7 @@ export class MainController {
 
             let db_response = await db.query(query,[ulica.grad.id, ulica.drzava.id])
 
-            const id = db_response.rows[0].id;
+            const id = db_response.rows[0]?.id ?? 1;
 
             query = `INSERT INTO ulica(id,naziv,grad_id,drzava_id) VALUES($1,$2,$3,$4)`;
             await db.query(query,[id+1, ulica.naziv, ulica.grad.id, ulica.drzava.id])
@@ -468,13 +475,9 @@ export class MainController {
     deleteRadniNalog = async (request: Request, response: Response, next: NextFunction) => {
         try {
             const id = request.params.id;
-            let query = `DELETE FROM radni_nalog WHERE id=$1`;
+            let query = `DELETE FROM radni_nalog_view WHERE id=$1`;
 
             let db_response = await db.query(query,[id]);
-
-            if(db_response.rowCount < 1){
-                sendResponse({ response, code: ErrorStatusCode.UNKNOWN_ERROR, status: 404, message: `Radni nalog sa id:${id} nije pornađen` })
-            }
 
             sendResponse({ response, code: SuccessStatusCode.OK, status: 200, payload: db_response.rows })
         } catch (error: any) {
@@ -578,6 +581,22 @@ export class MainController {
             }
 
             let db_response = await db.query(query,params);
+
+            sendResponse({ response, code: SuccessStatusCode.OK, status: 200, payload: db_response.rows })
+        } catch (error: any) {
+            // await db.query('ROLLBACK')
+            console.log(error);
+            sendResponse({ response, code: ErrorStatusCode.UNKNOWN_ERROR, status: 500, message: error.message })
+        }
+    }
+
+    changeRadnikOnPonuda = async (request: Request, response: Response, next: NextFunction) => {
+        try {
+            const ponuda =  request.body;
+            let query = `UPDATE ponuda_klijentu SET radnik_izdao=$1 WHERE id=$2`;
+    
+
+            let db_response = await db.query(query,[ponuda.novi_radnik.jmbg, ponuda.id]);
 
             sendResponse({ response, code: SuccessStatusCode.OK, status: 200, payload: db_response.rows })
         } catch (error: any) {

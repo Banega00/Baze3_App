@@ -115,6 +115,7 @@ export class VlasnistvaTabComponent implements OnInit {
       servisna_knjiga_id: this.vlasnistva[broj_sasije][0]?.servisna_knjiga_id ?? null,
       klijent_id: '',
       original_klijent_id: '',
+      original_ime_vlasnika: '',
       isEdit: true,
       isNew: true
     })

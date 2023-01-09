@@ -160,4 +160,8 @@ export class HttpService {
   saveNewStavka(stavka:StavkaRacunaModel){
     return this.http.post<CustomResponse<any>>(`${this.host}/stavka-racuna`, stavka)
   }
+
+  changeRadnikOnPonuda(ponuda:any){
+    return this.http.put<CustomResponse<any>>(`${this.host}/ponuda/radnik`, ponuda)
+  }
 }

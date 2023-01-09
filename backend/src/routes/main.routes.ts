@@ -46,6 +46,7 @@ router.delete('/radnik/:jmbg', mainController.deleteRadnik);
 //PONUDE
 router.get('/ponude',mainController.getPonude)
 router.post('/ponuda',mainController.savePonuda)
+router.put('/ponuda/radnik', mainController.changeRadnikOnPonuda)
 router.delete('/ponuda/:id',mainController.deletePonuda)
 
 //POZICIJE

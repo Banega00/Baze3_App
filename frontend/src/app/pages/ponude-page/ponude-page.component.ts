@@ -130,4 +130,22 @@ export class PonudePageComponent {
     this.kreirajPonudu();
     this.kreiranjeNovePonude = false;
   }
+
+  izmeniRadnika(ponuda:any){
+    ponuda.edit_radnik = true;
+  }
+
+  sacuvajNovogRadnika(ponuda:any){
+    this.httpService.changeRadnikOnPonuda(ponuda)
+    .subscribe({
+      next: (data) => {
+        this.openDialog('Radnik uspešno izmenjen');
+        this.getPonude();
+      },
+      error: (error) => {
+        console.log(error);
+        this.openDialog('Greška prilikom izmene radnika', error.error.message);
+      }
+    })
+  }
 }
