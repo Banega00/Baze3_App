@@ -108,4 +108,16 @@ export class HttpService {
   saveRadniNalog(radni_nalog:any) {
     return this.http.post<CustomResponse<any>>(`${this.host}/radni-nalog`,radni_nalog)
   }
+  
+  getPonude() {
+    return this.http.get<CustomResponse<any>>(`${this.host}/ponude`)
+  }
+
+  savePonuda(ponuda:any) {
+    return this.http.post<CustomResponse<any>>(`${this.host}/ponuda`,ponuda)
+  }
+
+  deletePonuda(id:any) {
+    return this.http.delete<CustomResponse<any>>(`${this.host}/ponuda/${id}`)
+  }
 }

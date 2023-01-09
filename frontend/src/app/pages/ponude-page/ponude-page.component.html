@@ -1,0 +1,97 @@
+<div class="main-container">
+    <div class="header-div">
+        <h1>Ponude</h1>
+    </div>
+    <button (click)="kreirajPonudu()" class="dodaj" color="primary" mat-raised-button>
+        <mat-icon>add</mat-icon>
+        Kreiraj novu Ponudu
+    </button>
+
+    <mat-card class="novi-rn-div" *ngIf="kreiranjeNovePonude">
+        <mat-form-field appearance="fill">
+            <mat-label>Za radni nalog</mat-label>
+            <mat-select [(ngModel)]="novaPonuda.radni_nalog">
+                <mat-option *ngFor="let radni_nalog of radniNalozi" [value]="radni_nalog">
+                    {{radni_nalog.id}}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+        <div>
+            <mat-form-field appearance="fill">
+                <mat-label>Datum</mat-label>
+                <input [(ngModel)]="novaPonuda.datum" matInput [matDatepicker]="picker2">
+                <mat-datepicker-toggle matIconSuffix [for]="picker2"></mat-datepicker-toggle>
+                <mat-datepicker #picker2></mat-datepicker>
+            </mat-form-field>
+        </div>
+        <div>
+            <mat-form-field class="example-full-width">
+                <mat-label>Koliko dana važi</mat-label>
+                <input [(ngModel)]="novaPonuda.vazi_dana" type="number" matInput>
+            </mat-form-field>
+        </div>
+        <div>
+            <mat-form-field appearance="fill">
+                <mat-label>Rok isporuke</mat-label>
+                <input [(ngModel)]="novaPonuda.rok_isporuke" matInput [matDatepicker]="picker3">
+                <mat-datepicker-toggle matIconSuffix [for]="picker3"></mat-datepicker-toggle>
+                <mat-datepicker #picker3></mat-datepicker>
+            </mat-form-field>
+        </div>
+
+        <div>
+            <mat-form-field appearance="fill">
+                <mat-label>Radnik izdao</mat-label>
+                <mat-select [(ngModel)]="novaPonuda.radnik_izdao">
+                    <mat-option *ngFor="let radnik of radnici" [value]="radnik">
+                        {{radnik.ime_prezime}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+
+        <div>
+            <button (click)="sacuvajPonudu()" class="dodaj" color="primary" mat-raised-button>
+                <mat-icon>save</mat-icon>
+                Sačuvaj
+            </button>
+            <button (click)="ponistiPonudu()" class="dodaj" color="primary" mat-raised-button>
+                <mat-icon>cancel</mat-icon>
+                Poništi
+            </button>
+        </div>
+    </mat-card>
+    <div class="cards">
+        <mat-card *ngFor="let ponuda of ponude">
+            <mat-card-content>
+                <div class="card-header">
+                    <h2>ID: {{ponuda.id}}</h2>
+                    <h4> Datum {{moment(ponuda.datum).format('DD-MM-YYYY')}}</h4>
+                </div>
+                <mat-divider style="margin: 0.5rem 0"></mat-divider>
+
+                <div>
+                    Važi <b>{{ponuda.vazi_dana}}</b> dana
+                </div>
+                <div>
+                    Rok isporuke: {{moment(ponuda.rok_isporuke).format('DD-MM-YYYY')}}
+                </div>
+
+                <mat-divider style="margin: 0.5rem 0"></mat-divider>
+
+                <div>
+                   <h4>Ponuda za radni nalog: {{ponuda.radni_nalog_id}}</h4>
+                </div>
+                <div>
+                    Ponudu izdao: {{ponuda.ime_prezime_izdavaoca}}
+                </div>
+
+                <mat-divider style="margin: 0.5rem 0"></mat-divider>
+
+                <div class="hidden-div">
+                    <button class="dodaj" (click)="obrisiPonudu(ponuda)" mat-raised-button color="primary">Obriši ponudu</button>
+                </div>
+            </mat-card-content>
+        </mat-card>
+    </div>
+</div>

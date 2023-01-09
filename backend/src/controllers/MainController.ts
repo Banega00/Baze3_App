@@ -295,7 +295,7 @@ export class MainController {
                     VALUES($1,$2,$3,$4,$5,$6,$7)`
 
                 db_response = await db.query(query, [vlasnistvo.rb, vlasnistvo.servisna_knjiga_id, vlasnistvo.broj_sasije,
-                vlasnistvo.klijent_id, vlasnistvo.datum_od, vlasnistvo.datum_do, vlasnistvo.ime_vlasnika])
+                vlasnistvo.klijent_id, formatDate(vlasnistvo.datum_od), formatDate(vlasnistvo.datum_do), vlasnistvo.ime_vlasnika])
 
                 await db.query('COMMIT')
             } else {
@@ -303,7 +303,7 @@ export class MainController {
                     SET datum_od=$1, datum_do=$2
                     WHERE rb=$3 AND servisna_knjiga_id=$4 AND broj_sasije=$5 AND klijent_id=$6`
 
-                const parameters = [vlasnistvo.datum_od, vlasnistvo.datum_do,
+                const parameters = [formatDate(vlasnistvo.datum_od), formatDate(vlasnistvo.datum_do),
                 vlasnistvo.rb, vlasnistvo.servisna_knjiga_id, vlasnistvo.broj_sasije,
                 vlasnistvo.klijent_id]
 
@@ -479,6 +479,7 @@ export class MainController {
             sendResponse({ response, code: ErrorStatusCode.UNKNOWN_ERROR, status: 500, message: error.message })
         }
     }
+
     createRadniNalog = async (request: Request, response: Response, next: NextFunction) => {
         try {
             const radni_nalog = request.body;
@@ -488,9 +489,9 @@ export class MainController {
                osnovni_pregled, spakovati_stare_delove, napomena)
                VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12);`
 
-            const params = [radni_nalog.datum_prijem, radni_nalog.vozilo.servisna_knjiga_id, radni_nalog.vozilo.broj_sasije,
+            const params = [formatDate(radni_nalog.datum_prijem), radni_nalog.vozilo.servisna_knjiga_id, radni_nalog.vozilo.broj_sasije,
             radni_nalog.radnik_primio.jmbg, radni_nalog.radnik_zaduzen.jmbg, radni_nalog.km_prijem, 
-            radni_nalog.km_isporuka, radni_nalog.datum_odobrenja, radni_nalog.odobreno_putem,
+            radni_nalog.km_isporuka, formatDate(radni_nalog.datum_odobrenja), radni_nalog.odobreno_putem,
             radni_nalog.osnovni_pregled, radni_nalog.spakovati_stare_delove, radni_nalog.napomena]
 
             let db_response = await db.query(query,params);
@@ -508,6 +509,66 @@ export class MainController {
             let query = `SELECT * FROM radnik`;
 
             let db_response = await db.query(query);
+
+            sendResponse({ response, code: SuccessStatusCode.OK, status: 200, payload: db_response.rows })
+        } catch (error: any) {
+            // await db.query('ROLLBACK')
+            console.log(error);
+            sendResponse({ response, code: ErrorStatusCode.UNKNOWN_ERROR, status: 500, message: error.message })
+        }
+    }
+
+    getPonude = async (request: Request, response: Response, next: NextFunction) => {
+        try {
+            let query = `SELECT * FROM ponuda_klijentu ORDER BY id DESC`;
+
+            let db_response = await db.query(query);
+
+            sendResponse({ response, code: SuccessStatusCode.OK, status: 200, payload: db_response.rows })
+        } catch (error: any) {
+            // await db.query('ROLLBACK')
+            console.log(error);
+            sendResponse({ response, code: ErrorStatusCode.UNKNOWN_ERROR, status: 500, message: error.message })
+        }
+    }
+
+    deletePonuda = async (request: Request, response: Response, next: NextFunction) => {
+        try {
+            const id = request.params.id;
+            let query = `DELETE FROM ponuda_klijentu WHERE id=$1`;
+
+            let db_response = await db.query(query,[id]);
+
+            if(db_response.rowCount < 1){
+                sendResponse({ response, code: ErrorStatusCode.UNKNOWN_ERROR, status: 404, message: `Ponuda sa id:${id} nije pornađen` })
+            }
+
+            sendResponse({ response, code: SuccessStatusCode.OK, status: 200, payload: db_response.rows })
+        } catch (error: any) {
+            // await db.query('ROLLBACK')
+            console.log(error);
+            sendResponse({ response, code: ErrorStatusCode.UNKNOWN_ERROR, status: 500, message: error.message })
+        }
+    }
+
+    savePonuda = async (request: Request, response: Response, next: NextFunction) => {
+        try {
+            const ponuda =  request.body;
+            let query = ''
+            let params:any[] = [];
+            if(ponuda.isNew){
+                query = `INSERT INTO ponuda_klijentu(datum, vazi_dana, 
+                    rok_isporuke, radni_nalog_id, radnik_izdao,
+                   ime_prezime_izdavaoca)
+                   VALUES ($1,$2,$3,$4,$5,$6);`
+    
+                params = [formatDate(ponuda.datum), ponuda.vazi_dana, formatDate(ponuda.rok_isporuke), 
+                    ponuda.radni_nalog.id, ponuda.radnik_izdao.jmbg, ponuda.radnik_izdao.ime_prezime]
+            }else{
+
+            }
+
+            let db_response = await db.query(query,params);
 
             sendResponse({ response, code: SuccessStatusCode.OK, status: 200, payload: db_response.rows })
         } catch (error: any) {

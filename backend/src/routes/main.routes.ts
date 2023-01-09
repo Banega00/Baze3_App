@@ -40,4 +40,9 @@ router.post('/radni-nalog', mainController.createRadniNalog)
 //RADNICI
 router.get('/radnici', mainController.getRadnici);
 
+//PONUDE
+router.get('/ponude',mainController.getPonude)
+router.post('/ponuda',mainController.savePonuda)
+router.delete('/ponuda/:id',mainController.deletePonuda)
+
 export const main_router = router;
