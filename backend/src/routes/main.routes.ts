@@ -35,7 +35,9 @@ router.put('/izvestaji', mainController.updateIzvestaj)
 //RADNI NALOG
 router.get('/radni-nalozi', mainController.getRadniNalozi)
 router.delete('/radni-nalog/:id', mainController.deleteRadniNalog)
+router.post('/radni-nalog', mainController.createRadniNalog)
 
+//RADNICI
 router.get('/radnici', mainController.getRadnici);
 
 export const main_router = router;

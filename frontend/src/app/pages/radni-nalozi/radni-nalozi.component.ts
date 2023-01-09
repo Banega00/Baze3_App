@@ -12,11 +12,13 @@ import { HttpService } from 'src/app/http.service';
 export class RadniNaloziComponent {
   moment: any = moment;
   radniNalozi:any[];
-
+  vozila:any[];
   radnici: any[];
 
   kreiranjeNovogRN: boolean = false;
-  noviRadniNalog = {};
+  noviRadniNalog:any = {};
+
+  selectedVozila:typeof this.vozila;
 
   constructor(private httpService: HttpService, private dialog: MatDialog) {
   }
@@ -24,6 +26,21 @@ export class RadniNaloziComponent {
   ngOnInit(): void {
     this.getRadniNalozi();
     this.getRadnici();
+    this.getVozila();
+  }
+
+  getVozila() {
+    this.httpService.getVozila()
+    .subscribe({
+      next: (data) => {
+        this.vozila = data.payload!;
+        this.selectedVozila = this.vozila;
+      },
+      error: (error) => {
+        console.log(error);
+        this.openDialog('Greška prilikom dovlačenja vozila', error.error.message);
+      }
+    })
   }
 
   getRadniNalozi() {
@@ -49,7 +66,7 @@ export class RadniNaloziComponent {
       },
       error: (error) => {
         console.log(error);
-        this.openDialog('Greška prilikom prikazivanja radnika', error.error.message);
+        this.openDialog('Greška prilikom dovlačenja radnika', error.error.message);
       }
     })
   }
@@ -93,5 +110,36 @@ export class RadniNaloziComponent {
       radnik_primio: null,
       radnik_zaduzen: null,
     }
+  }
+
+  onKey(event:Event) {
+    const value = (event.target as HTMLInputElement).value
+    this.selectedVozila = this.search(value);
+  }
+
+  search(value: string) {
+    let filter = value.toLowerCase();
+    return this.vozila.filter(option => option.broj_sasije.toLowerCase().startsWith(filter));
+  }
+
+  sacuvajRN(){
+    console.log(this.noviRadniNalog);
+    this.httpService.saveRadniNalog(this.noviRadniNalog)
+    .subscribe({
+      next: (data) => {
+        this.openDialog('Radni nalog uspešno sačuvan');
+        this.ponistiRN();
+        this.getRadniNalozi();
+      },
+      error: (error) => {
+        console.log(error);
+        this.openDialog('Greška prilikom dodavanja radnog naloga', error.error.message);
+      }
+    })
+  }
+
+  ponistiRN(){
+    this.kreirajRN();
+    this.kreiranjeNovogRN = false;
   }
 }

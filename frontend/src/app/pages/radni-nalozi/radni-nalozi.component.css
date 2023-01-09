@@ -36,3 +36,18 @@ button.dodaj{
 .osnovni_pregled_div mat-icon{
     margin-right: 0.5rem;
 }
+
+.novi-rn-div{
+    margin-bottom: 2rem;
+    width: 50vw;
+    padding: 1rem;
+}
+
+.novi-rn-div > * {
+    width: 100%;
+    display: flex;
+}
+
+.novi-rn-div > * > *{
+    flex: 1;
+}

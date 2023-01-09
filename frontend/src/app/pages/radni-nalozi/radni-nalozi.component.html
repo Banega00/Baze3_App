@@ -7,9 +7,90 @@
         Kreiraj novi Radni nalog
     </button>
 
-    <div *ngIf="kreiranjeNovogRN">
-        KREIRANJE NOVOG
-    </div>
+    <mat-card class="novi-rn-div" *ngIf="kreiranjeNovogRN">
+        <mat-form-field appearance="fill">
+            <mat-label>Za vozilo</mat-label>
+            <mat-select [(ngModel)]="noviRadniNalog.vozilo">
+                <input mat-input (keyup)="onKey($event)">
+                <mat-option *ngFor="let vozilo of selectedVozila" [value]="vozilo">
+                    {{vozilo.broj_sasije}}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+        <div>
+            <mat-form-field appearance="fill">
+                <mat-label>Datum prijema</mat-label>
+                <input [(ngModel)]="noviRadniNalog.datum_prijem" matInput [matDatepicker]="picker2">
+                <mat-datepicker-toggle matIconSuffix [for]="picker2"></mat-datepicker-toggle>
+                <mat-datepicker #picker2></mat-datepicker>
+            </mat-form-field>
+            <mat-form-field appearance="fill">
+                <mat-label>Datum odobrenja</mat-label>
+                <input [(ngModel)]="noviRadniNalog.datum_odobrenja" matInput [matDatepicker]="picker">
+                <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+        </div>
+        <div>
+            <mat-form-field class="example-full-width">
+                <mat-label>Kilometraža prijem</mat-label>
+                <input [(ngModel)]="noviRadniNalog.km_prijem" type="number" matInput>
+            </mat-form-field>
+            <mat-form-field class="example-full-width">
+                <mat-label>Kilometraža isporuka</mat-label>
+                <input [(ngModel)]="noviRadniNalog.km_isporuka" type="number" matInput>
+            </mat-form-field>
+        </div>
+        <div>
+            <mat-checkbox [(ngModel)]="noviRadniNalog.osnovni_pregled" class="example-margin">
+                Osnovni pregled izvršen
+            </mat-checkbox>
+            <mat-checkbox [(ngModel)]="noviRadniNalog.spakovati_stare_delove" class="example-margin">
+                Spakovati stare delove
+            </mat-checkbox>
+        </div>
+
+        <div>
+            <mat-form-field class="example-full-width">
+                <mat-label>Napomena</mat-label>
+                <input [(ngModel)]="noviRadniNalog.napomena" type="text" matInput>
+            </mat-form-field>
+            <mat-form-field class="example-full-width">
+                <mat-label>Odobreno putem</mat-label>
+                <input [(ngModel)]="noviRadniNalog.odobreno_putem" type="text" matInput>
+            </mat-form-field>
+        </div>
+
+        <div>
+            <mat-form-field appearance="fill">
+                <mat-label>Radnik primio</mat-label>
+                <mat-select [(ngModel)]="noviRadniNalog.radnik_primio">
+                    <mat-option *ngFor="let radnik of radnici" [value]="radnik">
+                        {{radnik.ime_prezime}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+            <mat-form-field appearance="fill">
+                <mat-label>Radnik zadužen</mat-label>
+                <mat-select [(ngModel)]="noviRadniNalog.radnik_zaduzen">
+                    <mat-option *ngFor="let radnik of radnici" [value]="radnik">
+                        {{radnik.ime_prezime}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+
+        <div>
+            <button (click)="sacuvajRN()" class="dodaj" color="primary" mat-raised-button>
+                <mat-icon>save</mat-icon>
+                Sačuvaj
+            </button>
+            <button (click)="ponistiRN()" class="dodaj" color="primary" mat-raised-button>
+                <mat-icon>cancel</mat-icon>
+                Poništi
+            </button>
+        </div>
+    </mat-card>
     <div class="cards">
         <mat-card *ngFor="let radniNalog of radniNalozi">
             <mat-card-content>
@@ -23,7 +104,7 @@
                     Datum prijema: {{moment(radniNalog.datum_prijem).format('DD-MM-YYYY')}}
                 </div>
                 <div>
-                    Datum isporuke: {{moment(radniNalog.datum_isporuke).format('DD-MM-YYYY')}}
+                    Datum isporuke: {{moment(radniNalog.datum_odobrenja).format('DD-MM-YYYY')}}
                 </div>
                 <!-- <div><b>Napomena: </b>{{izvestaj.napomena}}</div>
                 <div><b>Tačka mržnjenja antifriza: </b>{{izvestaj.antifriz_tacka_mrz}}</div>
@@ -40,27 +121,31 @@
 
                 <mat-divider style="margin: 0.5rem 0"></mat-divider>
 
-                <div class ="osnovni_pregled_div">
-                    <mat-icon aria-hidden="false" *ngIf="radniNalog.osnovni_pregled" aria-label="Example home icon" fontIcon="check"></mat-icon>
-                    <mat-icon aria-hidden="false" *ngIf="!radniNalog.osnovni_pregled" aria-label="Example home icon" fontIcon="cancel"></mat-icon>
+                <div class="osnovni_pregled_div">
+                    <mat-icon aria-hidden="false" *ngIf="radniNalog.osnovni_pregled" aria-label="Example home icon"
+                        fontIcon="check"></mat-icon>
+                    <mat-icon aria-hidden="false" *ngIf="!radniNalog.osnovni_pregled" aria-label="Example home icon"
+                        fontIcon="cancel"></mat-icon>
                     <div>
                         Osnovni pregled izvršen
                     </div>
                 </div>
-                <div class ="osnovni_pregled_div">
-                    <mat-icon aria-hidden="false" *ngIf="radniNalog.spakovati_stare_delove" aria-label="Example home icon" fontIcon="check"></mat-icon>
-                    <mat-icon aria-hidden="false" *ngIf="!radniNalog.spakovati_stare_delove" aria-label="Example home icon" fontIcon="cancel"></mat-icon>
+                <div class="osnovni_pregled_div">
+                    <mat-icon aria-hidden="false" *ngIf="radniNalog.spakovati_stare_delove"
+                        aria-label="Example home icon" fontIcon="check"></mat-icon>
+                    <mat-icon aria-hidden="false" *ngIf="!radniNalog.spakovati_stare_delove"
+                        aria-label="Example home icon" fontIcon="cancel"></mat-icon>
                     <div>
                         Spakovati stare delove
                     </div>
                 </div>
 
-                <div class ="osnovni_pregled_div">
+                <div class="osnovni_pregled_div">
                     <mat-icon aria-hidden="false" aria-label="Example home icon" fontIcon="info"></mat-icon>
 
                     Napomena: {{radniNalog.napomena ?? '/'}}
                 </div>
-                <div class ="osnovni_pregled_div">
+                <div class="osnovni_pregled_div">
                     <mat-icon aria-hidden="false" aria-label="Example home icon" fontIcon="info"></mat-icon>
 
                     Odobreno putem: {{radniNalog.odobreno_putem ?? '/'}}
@@ -72,7 +157,8 @@
                 <div><b>Radnik referisao:</b> {{radniNalog.radnik_zaduzen}}</div>
 
                 <div class="hidden-div">
-                    <button class="dodaj" (click)="obrisiRN(radniNalog)" mat-raised-button color="primary">Obriši radni nalog</button>
+                    <button class="dodaj" (click)="obrisiRN(radniNalog)" mat-raised-button color="primary">Obriši radni
+                        nalog</button>
                 </div>
             </mat-card-content>
         </mat-card>

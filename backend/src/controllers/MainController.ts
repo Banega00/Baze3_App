@@ -449,7 +449,8 @@ export class MainController {
             SELECT rn.*, r1.ime_prezime as radnik_primio, r2.ime_prezime as radnik_zaduzen
             FROM radni_nalog_view rn
             JOIN radnik r1 ON r1.jmbg = rn.radnik_primio
-            JOIN radnik r2 ON r2.jmbg = rn.radnik_zaduzen`;
+            JOIN radnik r2 ON r2.jmbg = rn.radnik_zaduzen
+            ORDER BY rn.id DESC`;
 
             let db_response = await db.query(query)
 
@@ -470,6 +471,29 @@ export class MainController {
             if(db_response.rowCount < 1){
                 sendResponse({ response, code: ErrorStatusCode.UNKNOWN_ERROR, status: 404, message: `Radni nalog sa id:${id} nije pornađen` })
             }
+
+            sendResponse({ response, code: SuccessStatusCode.OK, status: 200, payload: db_response.rows })
+        } catch (error: any) {
+            // await db.query('ROLLBACK')
+            console.log(error);
+            sendResponse({ response, code: ErrorStatusCode.UNKNOWN_ERROR, status: 500, message: error.message })
+        }
+    }
+    createRadniNalog = async (request: Request, response: Response, next: NextFunction) => {
+        try {
+            const radni_nalog = request.body;
+            const query = `INSERT INTO radni_nalog_view(datum_prijem, servisna_knjiga_id, 
+                broj_sasije, radnik_primio, radnik_zaduzen,
+               km_prijem, km_isporuka, datum_odobrenja, odobreno_putem,
+               osnovni_pregled, spakovati_stare_delove, napomena)
+               VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12);`
+
+            const params = [radni_nalog.datum_prijem, radni_nalog.vozilo.servisna_knjiga_id, radni_nalog.vozilo.broj_sasije,
+            radni_nalog.radnik_primio.jmbg, radni_nalog.radnik_zaduzen.jmbg, radni_nalog.km_prijem, 
+            radni_nalog.km_isporuka, radni_nalog.datum_odobrenja, radni_nalog.odobreno_putem,
+            radni_nalog.osnovni_pregled, radni_nalog.spakovati_stare_delove, radni_nalog.napomena]
+
+            let db_response = await db.query(query,params);
 
             sendResponse({ response, code: SuccessStatusCode.OK, status: 200, payload: db_response.rows })
         } catch (error: any) {

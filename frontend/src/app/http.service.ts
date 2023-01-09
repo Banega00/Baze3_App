@@ -104,4 +104,8 @@ export class HttpService {
   getRadnici() {
     return this.http.get<CustomResponse<any>>(`${this.host}/radnici`)
   }
+
+  saveRadniNalog(radni_nalog:any) {
+    return this.http.post<CustomResponse<any>>(`${this.host}/radni-nalog`,radni_nalog)
+  }
 }
