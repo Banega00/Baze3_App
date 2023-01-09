@@ -45,6 +45,16 @@ export class RacuniComponent implements OnInit{
   }
 
   obrisiRacun(racun:RacunModel){
-
+    this.httpService.obrisiRacun(racun.id)
+    .subscribe({
+      next: (data) => {
+        this.openDialog('Račun uspešno obrisan');
+        console.log(data);
+      },
+      error: (error) => {
+        console.log(error);
+        this.openDialog('Greška prilikom brisanja računa', error.error.message);
+      }
+    })
   }
 }

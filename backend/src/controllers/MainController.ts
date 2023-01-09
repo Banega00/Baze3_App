@@ -820,4 +820,16 @@ export class MainController {
             sendResponse({ response, code: ErrorStatusCode.UNKNOWN_ERROR, status: 500, message: error.message })
         }
     }
+
+    deleteRacun = async (request: Request, response: Response, next: NextFunction) => {
+        try {
+            const id: string = request.params.id;
+            const query = `DELETE FROM racun WHERE id = $1`
+            await db.query(query, [id]);
+            sendResponse({ response, code: SuccessStatusCode.OK, status: 201 })
+        } catch (error: any) {
+            console.log(error);
+            sendResponse({ response, code: ErrorStatusCode.UNKNOWN_ERROR, status: 500, message: error.message })
+        }
+    }
 }

@@ -53,6 +53,7 @@ router.get('/pozicije', mainController.getPozicije);
 
 //RACUNI
 router.get('/racuni', mainController.getRacuni)
+router.delete('/racun/:id', mainController.deleteRacun)
 
 //PROIZVODI
 router.get('/proizvodi', mainController.getProizvodi)

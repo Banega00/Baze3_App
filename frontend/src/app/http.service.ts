@@ -142,4 +142,8 @@ export class HttpService {
   getRacuni(){
     return this.http.get<CustomResponse<RacunModel[]>>(`${this.host}/racuni`)
   }
+
+  obrisiRacun(id: number){
+    return this.http.delete<CustomResponse<RacunModel[]>>(`${this.host}/racun/${id}`)
+  }
 }
