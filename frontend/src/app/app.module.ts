@@ -23,6 +23,7 @@ import { RadniciPageComponent } from './pages/radnici-page/radnici-page.componen
 import { RadnikComponent } from './pages/radnici-page/radnik/radnik.component';
 import { RacuniComponent } from './pages/racuni/racuni.component';
 import { StavkaRacunaComponent } from './pages/racuni/stavka-racuna/stavka-racuna.component';
+import { ProizvodiPageComponent } from './pages/proizvodi-page/proizvodi-page.component';
 
 @NgModule({
   declarations: [
@@ -43,6 +44,7 @@ import { StavkaRacunaComponent } from './pages/racuni/stavka-racuna/stavka-racun
     RadnikComponent,
     RacuniComponent,
     StavkaRacunaComponent,
+    ProizvodiPageComponent,
   ],
   imports: [
     BrowserModule,

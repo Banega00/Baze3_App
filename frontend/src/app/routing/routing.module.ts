@@ -3,6 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { IzvestajiPageComponent } from '../pages/izvestaji-page/izvestaji-page.component';
 import { KlijentiPageComponent } from '../pages/klijenti-page/klijenti-page.component';
 import { PonudePageComponent } from '../pages/ponude-page/ponude-page.component';
+import { ProizvodiPageComponent } from '../pages/proizvodi-page/proizvodi-page.component';
 import { RacuniComponent } from '../pages/racuni/racuni.component';
 import { RadniNaloziComponent } from '../pages/radni-nalozi/radni-nalozi.component';
 import { RadniciPageComponent } from '../pages/radnici-page/radnici-page.component';
@@ -21,6 +22,7 @@ const routes: Routes = [
   { path: 'ponude', component: PonudePageComponent },
   { path: 'radnici', component: RadniciPageComponent },
   { path: 'racuni', component: RacuniComponent },
+  { path: 'proizvodi', component: ProizvodiPageComponent },
   { path: '', redirectTo: '/klijenti', pathMatch: 'full' },
   { path: '**', redirectTo: '/klijenti', pathMatch: 'full' },
 ];
