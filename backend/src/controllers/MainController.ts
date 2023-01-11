@@ -667,7 +667,7 @@ export class MainController {
             JOIN cena_proizvoda cp ON cp.proizvod_id = p.sifra
             JOIN jedinica_mere jm ON jm.id = p.jedinica_mere_id
             JOIN valuta v ON cp.valuta_id = v.id
-            ORDER BY cp.datum_od DESC;`;
+            ORDER BY p.sifra DESC, cp.datum_od DESC;`;
 
             let db_response = await db.query(query);
 
@@ -690,8 +690,8 @@ export class MainController {
                     proizvodi.push({
                         aktuelna_cena: row.aktuelna_cena,
                         cene_proizvoda: [{
-                            datum_do: row.datum_od,
-                            datum_od: row.datum_do,
+                            datum_od: row.datum_od,
+                            datum_do: row.datum_do,
                             id: row.cena_proizvoda_id,
                             iznos: row.iznos,
                             proizvod_id: row.sifra,
