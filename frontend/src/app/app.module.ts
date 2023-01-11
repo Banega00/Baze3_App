@@ -54,7 +54,7 @@ import { ProizvodiPageComponent } from './pages/proizvodi-page/proizvodi-page.co
     AppRoutingModule,
     HttpClientModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

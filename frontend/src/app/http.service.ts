@@ -9,6 +9,8 @@ import { RacunModel } from '@shared-items/models/racun.model';
 import { RadnikModel } from '@shared-items/models/radnik.model';
 import { ProizvodModel } from '@shared-items/models/proizvod.model';
 import { StavkaRacunaModel } from '@shared-items/models/stavka-racuna.model';
+import { ValutaModel } from '@shared-items/models/valuta.model';
+import { CenaProizvodaModel } from '@shared-items/models/cena-proizvoda.model';
 @Injectable({
   providedIn: 'root'
 })
@@ -71,6 +73,10 @@ export class HttpService {
 
   deleteVlasnistvo(vlasnistvo: VlasnistvoModel & { isEdit: boolean; }) {
     return this.http.delete<CustomResponse<any>>(`${this.host}/vlasnistvo`,{body: vlasnistvo})
+  }
+
+  getValute(){
+    return this.http.get<CustomResponse<ValutaModel[]>>(`${this.host}/valute`)
   }
 
   saveVlasnistvo(vlasnistvo: VlasnistvoModel & { isEdit: boolean; }) {
@@ -163,5 +169,13 @@ export class HttpService {
 
   changeRadnikOnPonuda(ponuda:any){
     return this.http.put<CustomResponse<any>>(`${this.host}/ponuda/radnik`, ponuda)
+  }
+
+  obrisiCenuProizvoda(proizvod_id: string, cena_proizvoda_id: number){
+    return this.http.delete<CustomResponse<any>>(`${this.host}/proizvod/cena`, {body: {proizvod_id, cena_proizvoda_id}})
+  }
+
+  saveNewCena(cena_proizvoda: CenaProizvodaModel){
+    return this.http.post<CustomResponse<any>>(`${this.host}/proizvod/cena`, cena_proizvoda);
   }
 }

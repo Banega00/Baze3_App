@@ -11,6 +11,7 @@ import { ProizvodModel } from '@shared-items/models/proizvod.model';
 import { RacunModel } from '@shared-items/models/racun.model';
 import { formatDate } from "../utils/helper-functions";
 import { StavkaRacunaModel } from "@shared-items/models/stavka-racuna.model";
+import { CenaProizvodaModel } from "@shared-items/models/cena-proizvoda.model";
 
 export class MainController {
     constructor() {
@@ -665,7 +666,8 @@ export class MainController {
             FROM proizvod p 
             JOIN cena_proizvoda cp ON cp.proizvod_id = p.sifra
             JOIN jedinica_mere jm ON jm.id = p.jedinica_mere_id
-            JOIN valuta v ON cp.valuta_id = v.id;`;
+            JOIN valuta v ON cp.valuta_id = v.id
+            ORDER BY cp.datum_od DESC;`;
 
             let db_response = await db.query(query);
 
@@ -676,8 +678,8 @@ export class MainController {
 
                 if(proizvod){
                     proizvod.cene_proizvoda!.push({
-                        datum_do: row.datum_od,
-                        datum_od: row.datum_do,
+                        datum_od: row.datum_od,
+                        datum_do: row.datum_do,
                         id: row.cena_proizvoda_id,
                         iznos: row.iznos,
                         proizvod_id: row.sifra,
@@ -876,6 +878,34 @@ export class MainController {
             INSERT INTO stavka_racuna(rb, racun_id, kolicina, procenat_rabat, proizvod_id) 
             VALUES ($1,$2,$3,$4,$5);`
             await db.query(query, [rb, stavka_racuna.racun_id, stavka_racuna.kolicina, stavka_racuna.procenat_raba ?? 0, stavka_racuna.proizvod.sifra]);
+            sendResponse({ response, code: SuccessStatusCode.OK, status: 200 })
+        } catch (error: any) {
+            console.log(error);
+            sendResponse({ response, code: ErrorStatusCode.UNKNOWN_ERROR, status: 500, message: error.message })
+        }
+    }
+
+    deleteCenaProizvoda = async (request: Request, response: Response, next: NextFunction) => {
+        try {
+            const {proizvod_id, cena_proizvoda_id} = request.body;
+
+            const query = `DELETE FROM cena_proizvoda WHERE proizvod_id=$1 AND id=$2;`
+            await db.query(query, [proizvod_id,cena_proizvoda_id]);
+            sendResponse({ response, code: SuccessStatusCode.OK, status: 200 })
+        } catch (error: any) {
+            console.log(error);
+            sendResponse({ response, code: ErrorStatusCode.UNKNOWN_ERROR, status: 500, message: error.message })
+        }
+    }
+
+    saveCenaProizvoda = async (request: Request, response: Response, next: NextFunction) => {
+        try {
+            const body:CenaProizvodaModel = request.body;
+
+            const query = `INSERT INTO cena_proizvoda(proizvod_id, valuta_id, iznos, datum_od)
+            VALUES($1,$2,$3,$4);`
+
+            await db.query(query, [body.proizvod_id, body.valuta.id,body.iznos, formatDate(body.datum_od)]);
             sendResponse({ response, code: SuccessStatusCode.OK, status: 200 })
         } catch (error: any) {
             console.log(error);

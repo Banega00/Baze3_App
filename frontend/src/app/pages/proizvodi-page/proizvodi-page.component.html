@@ -1,1 +1,70 @@
-<p>proizvodi-page works!</p>
+<div class="main-container">
+    <div class="header-div">
+        <h1>Proizvodi</h1>
+        <!-- <button class="dodaj" mat-raised-button color="primary">Dodaj Marku</button> -->
+        <!-- <button class="dodaj" mat-raised-button color="primary">Dodaj Model</button> -->
+    </div>
+    <mat-accordion>
+        <mat-expansion-panel *ngFor="let proizvod of proizvodi" (opened)="panelOpenState = true"
+            (closed)="panelOpenState = false">
+            <mat-expansion-panel-header>
+                <mat-panel-title>
+                    <b>{{proizvod.sifra}} </b>&nbsp;| {{proizvod.naziv}}
+                </mat-panel-title>
+                <mat-panel-description class="cena">
+                    Aktuelna cena: <b> {{proizvod.aktuelna_cena}} </b>
+                    &nbsp;{{proizvod?.cene_proizvoda?.[0]?.valuta?.oznaka ?? ''}}
+                </mat-panel-description>
+            </mat-expansion-panel-header>
+            <ul class="cene">
+                <button (click)="addNewCena(proizvod)" class="dodaj" color="primary" mat-raised-button>
+                    <mat-icon>add</mat-icon>
+                    Dodaj novu cenu
+                </button>
+                <div *ngIf="proizvod.addingNewCena">
+                    <mat-form-field>
+                        <mat-label>Cena</mat-label>
+                        <input matInput [(ngModel)]="proizvod.nova_cena.iznos" type="number">
+                    </mat-form-field>
+                    <mat-form-field appearance="fill">
+                        <mat-label>Valuta</mat-label>
+                        <mat-select [(ngModel)]="proizvod.nova_cena.valuta">
+                            <mat-option *ngFor="let valuta of valute" [value]="valuta">
+                                {{valuta.oznaka}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <mat-form-field appearance="fill">
+                        <mat-label>Datum od</mat-label>
+                        <input [(ngModel)]="proizvod.nova_cena.datum_od" matInput [matDatepicker]="picker1">
+                        <mat-datepicker-toggle matIconSuffix [for]="picker1"></mat-datepicker-toggle>
+                        <mat-datepicker #picker1></mat-datepicker>
+                    </mat-form-field>
+                    <button class="dodaj"(click)="sacuvajCenu(proizvod)" mat-raised-button color="primary">Sačuvaj</button>
+
+                    <button class="dodaj"(click)="ponistiDodavanjeCene(proizvod)" mat-raised-button color="primary">Poništi</button>
+                </div>
+                <li class="cena-proizvoda header">
+                    <div>Cena</div>
+                    <div>Valuta</div>
+                    <div>Datum od</div>
+                    <div>Datum do</div>
+                    <div></div>
+                </li>
+                <hr class="cena-hr">
+                <div *ngFor="let cp of proizvod.cene_proizvoda; index as i;">
+                    <li class="cena-proizvoda">
+                        <div><b>{{cp.iznos}}</b></div>
+                        <div>{{cp.valuta?.oznaka}}</div>
+                        <div>{{cp.datum_od ? moment(cp.datum_od).format('DD.MM.YYYY') : '/'}}</div>
+                        <div>{{cp.datum_do ? moment(cp.datum_do).format('DD.MM.YYYY') : '/'}}</div>
+                        <mat-icon (click)="obrisiCenuProizvoda(proizvod, cp)" aria-hidden="false"
+                            aria-label="Example home icon" fontIcon="delete"></mat-icon>
+                    </li>
+                    <mat-divider></mat-divider>
+
+                </div>
+            </ul>
+        </mat-expansion-panel>
+    </mat-accordion>
+</div>

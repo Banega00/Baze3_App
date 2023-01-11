@@ -62,5 +62,7 @@ router.post('/stavka-racuna', mainController.dodajStavku)
 router.get('/proizvodi', mainController.getProizvodi)
 router.get('/jedinice-mere', mainController.getJediniceMere)
 router.get('/valute', mainController.getValute)
+router.delete('/proizvod/cena', mainController.deleteCenaProizvoda)
+router.post('/proizvod/cena', mainController.saveCenaProizvoda)
 
 export const main_router = router;

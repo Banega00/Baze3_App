@@ -1,0 +1,63 @@
+.main-container{
+    padding: 5rem
+}
+
+button.dodaj{
+    margin-right: 1rem;
+    margin-bottom: 1rem;
+}
+
+.header-div{
+    display: flex;
+}
+
+.header-div h1{
+    margin-right: 2rem;
+}
+
+.spiner{
+    margin:auto;
+}
+
+.cena{
+    font-size: 1.2em;
+}
+
+mat-panel-title{
+    font-size: 1.25em;
+}
+
+.cena b{
+    margin-left: .5em;
+    font-size: 1.1em;
+}
+
+.cene{
+    display: flex;
+    justify-content: flex-start;
+    flex-direction: column;
+    font-size: 1.2em;
+}
+
+.cena-proizvoda.header{
+    font-size: 1.1em;
+    font-weight: bold;
+}
+
+.cena-proizvoda{
+    display: flex;
+    cursor: pointer;
+}
+
+.cena-proizvoda > * {
+    flex: 1;
+    text-align: left;
+    padding: .5rem 0;
+}
+
+.cena-proizvoda:hover {
+    background-color: rgb(242, 242, 242);
+}
+
+.cena-hr{
+}
