@@ -13,7 +13,7 @@ process.env.TZ = 'UTC'
 
 app.use(cors())
 app.use(express.json())
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || process.env.port || 3000;
 
 app.use(main_router)
 
